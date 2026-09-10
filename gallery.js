@@ -1,0 +1,1 @@
+import { IMAGES } from './images.js';const imgs=[...IMAGES.looks,...IMAGES.clients,IMAGES.bridal,IMAGES.graduation,IMAGES.engagement,IMAGES.photoshoot];document.querySelector('[data-gallery]').innerHTML=imgs.map((src,i)=>`<figure><img loading="lazy" src="${src}" alt="Cisca Makeovers look ${i+1}"></figure>`).join('');
