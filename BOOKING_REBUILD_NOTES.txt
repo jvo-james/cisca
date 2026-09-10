@@ -1,0 +1,53 @@
+CISCA MAKEOVERS — BOOKING PAGE REBUILD
+
+Replace these files in the current brand-commerce repo:
+
+1. booking.html
+2. booking.css
+3. booking.js
+4. gallery.js
+5. netlify/functions/cisca.mjs
+
+No files need to be deleted.
+No new environment variables are required.
+
+What changed
+------------
+- Removed the large booking hero completely.
+- Added a compact booking intro with WhatsApp help.
+- Rebuilt booking as four real steps: Service, Date & Time, Details, Review.
+- Added occasion-led recommendations before service selection.
+- Added image-led service selection using Cisca's existing images.
+- Added example-look previews without leaving the booking page.
+- Added custom calendar UI instead of browser date input.
+- Added tappable appointment time slots.
+- Closed dates set in Admin are disabled automatically.
+- Existing bookings block overlapping appointment times without exposing client information.
+- Added Studio vs Home Service selection with conditional address field.
+- Shortened the personal-details step and added optional client-note prompts.
+- Added 50% deposit vs full-payment choice in the final Review step.
+- Rebuilt the final review card and payment CTA.
+- Rebuilt the desktop sticky appointment summary.
+- Added a mobile sticky appointment bar with a bottom-sheet summary.
+- Added compact booking reassurance content beneath the experience.
+- Gallery "Book this look" links now preselect a relevant service and occasion.
+- Existing service-page ?service= links continue to work.
+
+Availability behavior
+---------------------
+The public availability endpoint now supports a month view. It returns only:
+- closed dates
+- anonymous busy time ranges
+
+It never exposes booking names, email addresses, phone numbers or notes.
+
+The server also checks the selected date/time again immediately before creating the pending booking and Paystack payment session.
+
+The six appointment start times shown in booking.js are configured in TIME_SLOTS:
+09:00, 10:30, 12:00, 13:30, 15:00, 16:30
+
+If Cisca later wants different operating hours, edit only that TIME_SLOTS array.
+
+Deployment
+----------
+Commit these files, push them, then trigger a fresh Netlify production deployment because netlify/functions/cisca.mjs changed.

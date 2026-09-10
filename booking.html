@@ -1,5 +1,298 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book Cisca | Beauty Appointment</title><meta name="description" content="Build and pay for your Cisca Makeovers appointment online."><link rel="stylesheet" href="base.css"><link rel="stylesheet" href="booking.css"></head><body><div data-site-header></div><main>
-<section class="booking-hero"><div class="booking-hero-copy"><span class="eyebrow" style="color:var(--wine)">Book Cisca</span><h1>Build your appointment.</h1><p>Choose your beauty service, find a date, tell us about yourself and confirm securely.</p></div><img src="images/client-02.webp" alt="Cisca Makeovers client"></section>
-<nav class="booking-steps"><div class="wrap"><button class="step-dot active" data-step-nav="1"><span>01</span>Service</button><button class="step-dot" data-step-nav="2"><span>02</span>Date & place</button><button class="step-dot" data-step-nav="3"><span>03</span>Your details</button><button class="step-dot" data-step-nav="4"><span>04</span>Review & pay</button></div></nav>
-<section class="wrap booking-shell"><form data-booking-form><section class="booking-stage active" data-stage="1"><h2>What are we doing?</h2><p class="lead">Choose one or more services for this appointment.</p><div class="service-picker" data-service-picker></div><div class="stage-actions"><span></span><button type="button" class="btn" data-next>Choose date</button></div></section><section class="booking-stage" data-stage="2"><h2>When should we see you?</h2><p class="lead">Choose your preferred date, time and appointment location.</p><div class="booking-fields"><div class="field"><label>Date</label><input name="date" type="date" required></div><div class="field"><label>Preferred time</label><input name="time" type="time" required></div><div class="full"><span class="eyebrow" style="margin:12px 0">Where?</span><div class="location-options"><div class="radio-card"><label><input type="radio" name="locationType" value="Studio appointment" checked><span><strong>Cisca Studio</strong><small>Come to the studio in Accra.</small></span></label></div><div class="radio-card"><label><input type="radio" name="locationType" value="Home appointment"><span><strong>Home service</strong><small>Location details will be reviewed before confirmation.</small></span></label></div></div></div></div><div class="stage-actions"><button type="button" class="btn btn-outline" data-back>Back</button><button type="button" class="btn" data-next>Continue</button></div></section><section class="booking-stage" data-stage="3"><h2>Tell us who to expect.</h2><p class="lead">Use contact details you check regularly. Booking updates will be sent here.</p><div class="booking-fields"><div class="field"><label>First name</label><input name="firstName" required autocomplete="given-name"></div><div class="field"><label>Last name</label><input name="lastName" required autocomplete="family-name"></div><div class="field"><label>Email</label><input name="email" type="email" required autocomplete="email"></div><div class="field"><label>Phone</label><input name="phone" type="tel" required autocomplete="tel"></div><div class="field full"><label>Address or location notes</label><input name="address" autocomplete="street-address" placeholder="Only needed if relevant to your appointment"></div><div class="field full"><label>Anything we should know?</label><textarea name="notes" rows="4" placeholder="Reference look, skin notes, occasion, timing or other details"></textarea></div></div><div class="stage-actions"><button type="button" class="btn btn-outline" data-back>Back</button><button type="button" class="btn" data-next>Review appointment</button></div></section><section class="booking-stage" data-stage="4"><h2>One last look.</h2><p class="lead">Check your appointment details before continuing to secure payment.</p><div class="booking-review" data-review></div><div class="stage-actions"><button type="button" class="btn btn-outline" data-back>Back</button><button class="btn btn-wine" data-submit>Continue to secure payment</button></div></section></form><aside class="booking-summary"><span class="eyebrow">Your appointment</span><h3>At a glance</h3><dl><div class="row"><dt>Service</dt><dd data-sum-services>Choose a service</dd></div><div class="row"><dt>Date</dt><dd data-sum-date>Not selected</dd></div><div class="row"><dt>Location</dt><dd data-sum-location>Cisca Studio</dd></div></dl><div class="booking-total"><span>Services</span><span data-sum-total>GH₵0.00</span></div><p class="booking-note">Your final booking status is confirmed after payment verification.</p></aside></section>
-</main><div data-site-footer></div><script type="module" src="shared.js"></script><script type="module" src="booking.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Book Cisca | Beauty Appointment</title>
+  <meta name="description" content="Choose your Cisca Makeovers service, date and time, then secure your appointment online.">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="booking.css">
+</head>
+<body>
+  <div data-site-header></div>
+
+  <main class="booking-page">
+    <section class="booking-intro wrap">
+      <div>
+        <span class="booking-kicker">Book Cisca</span>
+        <h1>Your appointment starts here.</h1>
+        <p>Choose your service, date and preferred time.</p>
+      </div>
+      <a class="booking-help" data-booking-help target="_blank" rel="noopener">
+        <span>Need help?</span>
+        WhatsApp us
+      </a>
+    </section>
+
+    <nav class="booking-progress" aria-label="Booking progress">
+      <div class="wrap booking-progress-inner">
+        <button type="button" class="progress-step active" data-step-nav="1">
+          <span>01</span><strong>Service</strong><small data-progress-service>Choose your look</small>
+        </button>
+        <button type="button" class="progress-step" data-step-nav="2">
+          <span>02</span><strong>Date &amp; time</strong><small data-progress-date>Pick a slot</small>
+        </button>
+        <button type="button" class="progress-step" data-step-nav="3">
+          <span>03</span><strong>Details</strong><small>A few details</small>
+        </button>
+        <button type="button" class="progress-step" data-step-nav="4">
+          <span>04</span><strong>Review</strong><small>Check &amp; pay</small>
+        </button>
+      </div>
+    </nav>
+
+    <section class="wrap booking-layout">
+      <form class="booking-form" data-booking-form novalidate>
+        <input type="hidden" name="date">
+        <input type="hidden" name="time">
+        <input type="hidden" name="occasion">
+
+        <section class="booking-stage active" data-stage="1">
+          <header class="stage-heading">
+            <span class="stage-number">01</span>
+            <div>
+              <h2>What are we getting you ready for?</h2>
+              <p>Pick the moment and we’ll help you narrow down the right service.</p>
+            </div>
+          </header>
+
+          <div class="occasion-grid" data-occasion-grid>
+            <button type="button" class="occasion-card" data-occasion="Birthday">
+              <img src="images/look-08.webp" alt="Birthday beauty look" loading="lazy">
+              <span>Birthday</span>
+            </button>
+            <button type="button" class="occasion-card" data-occasion="Wedding">
+              <img src="images/bridal.webp" alt="Bridal makeup look" loading="lazy">
+              <span>Wedding</span>
+            </button>
+            <button type="button" class="occasion-card" data-occasion="Graduation">
+              <img src="images/look-05.webp" alt="Graduation makeup look" loading="lazy">
+              <span>Graduation</span>
+            </button>
+            <button type="button" class="occasion-card" data-occasion="Photoshoot">
+              <img src="images/look-02.webp" alt="Photoshoot beauty look" loading="lazy">
+              <span>Photoshoot</span>
+            </button>
+            <button type="button" class="occasion-card" data-occasion="Date / Event">
+              <img src="images/look-03.webp" alt="Event makeup look" loading="lazy">
+              <span>Date / Event</span>
+            </button>
+            <button type="button" class="occasion-card" data-occasion="Just because">
+              <img src="images/look-06.webp" alt="Cisca signature makeup look" loading="lazy">
+              <span>Just because</span>
+            </button>
+          </div>
+
+          <button type="button" class="skip-occasion" data-skip-occasion>I already know what I want <span>↓</span></button>
+
+          <div class="service-section" data-service-section>
+            <div class="service-section-head">
+              <div>
+                <span class="booking-kicker" data-service-kicker>Choose your service</span>
+                <h3 data-service-heading>What are we doing today?</h3>
+                <p data-service-copy>Choose the service that feels right for you.</p>
+              </div>
+              <div class="service-tabs" data-service-tabs></div>
+            </div>
+            <div class="service-picker" data-service-picker></div>
+          </div>
+
+          <div class="stage-actions stage-actions-end">
+            <button type="button" class="booking-primary" data-next>Choose a date <span>→</span></button>
+          </div>
+        </section>
+
+        <section class="booking-stage" data-stage="2">
+          <header class="stage-heading">
+            <span class="stage-number">02</span>
+            <div>
+              <h2>When should we see you?</h2>
+              <p>Choose an available date, then pick the time that works best.</p>
+            </div>
+          </header>
+
+          <div class="schedule-layout">
+            <div class="calendar-panel">
+              <div class="calendar-head">
+                <div>
+                  <span class="booking-kicker">Pick your date</span>
+                  <h3 data-calendar-label></h3>
+                </div>
+                <div class="calendar-arrows">
+                  <button type="button" data-calendar-prev aria-label="Previous month">←</button>
+                  <button type="button" data-calendar-next aria-label="Next month">→</button>
+                </div>
+              </div>
+              <div class="calendar-week" aria-hidden="true">
+                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+              </div>
+              <div class="calendar-grid" data-calendar></div>
+              <p class="calendar-note" data-calendar-note>Select a date to see available times.</p>
+            </div>
+
+            <div class="times-panel">
+              <span class="booking-kicker">Available times</span>
+              <h3 data-times-heading>Choose a date first</h3>
+              <div class="time-slots" data-time-slots>
+                <p class="time-empty">Available times will appear here.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="location-section">
+            <div class="location-heading">
+              <span class="booking-kicker">Appointment location</span>
+              <h3>Where should we get you ready?</h3>
+            </div>
+            <div class="location-options">
+              <label class="location-option selected">
+                <input type="radio" name="locationType" value="Studio appointment" checked>
+                <span class="location-check">✓</span>
+                <span><strong>Cisca Studio</strong><small>Come to the studio in Accra.</small></span>
+              </label>
+              <label class="location-option">
+                <input type="radio" name="locationType" value="Home appointment">
+                <span class="location-check">✓</span>
+                <span><strong>Home service</strong><small>We’ll come to you. Travel charges may apply.</small></span>
+              </label>
+            </div>
+            <div class="home-address" data-home-address hidden>
+              <label for="booking-address">What area are you in?</label>
+              <input id="booking-address" name="address" autocomplete="street-address" placeholder="Enter your neighbourhood or address">
+            </div>
+          </div>
+
+          <div class="stage-actions">
+            <button type="button" class="booking-secondary" data-back>← Back</button>
+            <button type="button" class="booking-primary" data-next>Continue <span>→</span></button>
+          </div>
+        </section>
+
+        <section class="booking-stage" data-stage="3">
+          <header class="stage-heading">
+            <span class="stage-number">03</span>
+            <div>
+              <h2>A few details about you.</h2>
+              <p>We’ll use these details for your booking confirmation and appointment updates.</p>
+            </div>
+          </header>
+
+          <div class="details-grid">
+            <div class="booking-field">
+              <label for="first-name">First name</label>
+              <input id="first-name" name="firstName" required autocomplete="given-name">
+            </div>
+            <div class="booking-field">
+              <label for="last-name">Last name</label>
+              <input id="last-name" name="lastName" required autocomplete="family-name">
+            </div>
+            <div class="booking-field">
+              <label for="booking-phone">Phone number</label>
+              <input id="booking-phone" name="phone" type="tel" required autocomplete="tel">
+            </div>
+            <div class="booking-field">
+              <label for="booking-email">Email address</label>
+              <input id="booking-email" name="email" type="email" required autocomplete="email">
+              <small>Your confirmation and appointment updates will be sent here.</small>
+            </div>
+          </div>
+
+          <div class="client-notes">
+            <span class="booking-kicker">Anything Cisca should know?</span>
+            <div class="note-prompts" data-note-prompts>
+              <button type="button" data-note="I have sensitive skin">Sensitive skin</button>
+              <button type="button" data-note="I'm bringing inspiration photos">I have inspiration photos</button>
+              <button type="button" data-note="It's for a special occasion">Special occasion</button>
+            </div>
+            <label class="sr-only" for="booking-notes">Appointment notes</label>
+            <textarea id="booking-notes" name="notes" rows="4" placeholder="Anything else you’d like Cisca to know?"></textarea>
+          </div>
+
+          <div class="stage-actions">
+            <button type="button" class="booking-secondary" data-back>← Back</button>
+            <button type="button" class="booking-primary" data-next>Review appointment <span>→</span></button>
+          </div>
+        </section>
+
+        <section class="booking-stage" data-stage="4">
+          <header class="stage-heading">
+            <span class="stage-number">04</span>
+            <div>
+              <h2>Everything look good?</h2>
+              <p>Review your appointment, choose how you’d like to pay, then secure your time.</p>
+            </div>
+          </header>
+
+          <div class="review-card" data-review></div>
+
+          <div class="payment-choice">
+            <span class="booking-kicker">Payment</span>
+            <h3>Secure your appointment</h3>
+            <label class="payment-option selected">
+              <input type="radio" name="paymentOption" value="deposit" checked>
+              <span><strong>Pay 50% deposit</strong><small>Pay the balance later.</small></span>
+              <b data-deposit-price>GH₵0.00</b>
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="paymentOption" value="full">
+              <span><strong>Pay in full</strong><small>Take care of the full service amount now.</small></span>
+              <b data-full-price>GH₵0.00</b>
+            </label>
+          </div>
+
+          <div class="stage-actions">
+            <button type="button" class="booking-secondary" data-back>← Back</button>
+            <button class="booking-primary booking-pay" data-submit>Secure my appointment <span data-due-now></span></button>
+          </div>
+        </section>
+      </form>
+
+      <aside class="appointment-summary" data-booking-summary>
+        <div class="summary-image" data-summary-image>
+          <img src="images/look-06.webp" alt="Cisca beauty look">
+        </div>
+        <div class="summary-content">
+          <span class="booking-kicker">Your appointment</span>
+          <h3 data-sum-services>No service selected</h3>
+          <div class="summary-details">
+            <div><span>Date</span><strong data-sum-date>Not selected</strong></div>
+            <div><span>Time</span><strong data-sum-time>Not selected</strong></div>
+            <div><span>Location</span><strong data-sum-location>Cisca Studio</strong></div>
+          </div>
+          <div class="summary-total"><span>Estimated total</span><strong data-sum-total>GH₵0.00</strong></div>
+          <button type="button" class="summary-change" data-change-service hidden>Change service</button>
+          <a class="summary-help" data-summary-help target="_blank" rel="noopener">Need help? Chat with us on WhatsApp →</a>
+        </div>
+      </aside>
+    </section>
+
+    <section class="booking-reassurance">
+      <div class="wrap reassurance-grid">
+        <div><span>01</span><h3>Deposits</h3><p>Your payment secures the appointment. We verify it before confirming your booking.</p></div>
+        <div><span>02</span><h3>Changes</h3><p>Need to adjust your appointment? Contact Cisca as early as possible and we’ll help.</p></div>
+        <div><span>03</span><h3>Home service</h3><p>Travel charges depend on your location and can be confirmed before the appointment.</p></div>
+        <div><span>04</span><h3>Updates</h3><p>Use an email address you check. Booking confirmations and status updates are sent there.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="mobile-booking-bar" data-mobile-summary-bar hidden>
+    <button type="button" data-mobile-summary-open>
+      <span><small data-mobile-service>Appointment</small><strong data-mobile-total>GH₵0.00</strong></span>
+      <b>View ↑</b>
+    </button>
+  </div>
+  <div class="mobile-summary-sheet" data-mobile-summary-sheet aria-hidden="true">
+    <button type="button" class="sheet-backdrop" data-mobile-summary-close aria-label="Close appointment summary"></button>
+    <div class="sheet-panel">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head"><span>Your appointment</span><button type="button" data-mobile-summary-close>×</button></div>
+      <div class="sheet-body" data-mobile-summary-content></div>
+    </div>
+  </div>
+
+  <div data-site-footer></div>
+  <script type="module" src="shared.js"></script>
+  <script type="module" src="booking.js"></script>
+</body>
+</html>
