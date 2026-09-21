@@ -1,4 +1,3 @@
-import { IMAGES } from './images.js';
 export const PRODUCT_SEED = [
   {
     "id": "mix-rhinestone",
@@ -1493,6 +1492,3 @@ export const CLASS_SEED = [
  {id:'nail-foundations',title:'Nail Foundations',track:'Nails',level:'Beginner',price:null,available:false,duration:'Set by admin',summary:'A guided introduction to prep, tools, acrylic basics, gel polish and simple nail art.',featured:false},
  {id:'wig-install-styling',title:'Wig Installation & Styling',track:'Hair',level:'Beginner',price:null,available:false,duration:'Set by admin',summary:'Learn closure and frontal prep, installation, melting, curling and polished finishing.',featured:false}
 ];
-
-const productImageByCategory={Makeup:IMAGES.makeup,Nails:IMAGES.nails,'Brow & Lash':IMAGES.brows,Lashes:IMAGES.lashes,Hair:IMAGES.hair,Complexion:IMAGES.makeup,Eyes:IMAGES.makeup,Lips:IMAGES.makeup};
-PRODUCT_SEED.forEach(product=>{if(!product.image) product.image=productImageByCategory[product.category]||IMAGES.beauty;});

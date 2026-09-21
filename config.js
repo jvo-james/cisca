@@ -19,4 +19,24 @@ export const CISCA_CONFIG = {
     appId: '1:660012189991:web:01876947ee756491c30102'
   }
 };
-export const money = (value) => new Intl.NumberFormat(CISCA_CONFIG.locale, { style:'currency', currency:CISCA_CONFIG.currency, maximumFractionDigits:2 }).format(Number(value||0));
+
+export const DEFAULT_SITE = Object.freeze({
+  brand: CISCA_CONFIG.brand,
+  tagline: 'Beauty Studio · Academy · Shop',
+  heroKicker: 'Cisca Beauty',
+  heroTitle: 'Your beauty.<br>Your moment.',
+  heroText: 'Looks worth remembering, skills worth keeping and beauty essentials chosen with care.',
+  locationLabel: '',
+  phoneDisplay: CISCA_CONFIG.phoneDisplay,
+  whatsapp: CISCA_CONFIG.whatsapp,
+  instagram: CISCA_CONFIG.instagram,
+  youtube: CISCA_CONFIG.youtube,
+  pinterest: CISCA_CONFIG.pinterest,
+  footerText: 'Beauty services, practical classes and beauty essentials in one place.'
+});
+
+export const money = value => new Intl.NumberFormat(CISCA_CONFIG.locale, {
+  style: 'currency',
+  currency: CISCA_CONFIG.currency,
+  maximumFractionDigits: 2
+}).format(Number(value || 0));

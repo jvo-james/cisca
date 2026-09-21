@@ -1,4 +1,4 @@
-CISCA MAKEOVERS — BRAND COMMERCE REBUILD
+CISCA MAKEOVERS  -  BRAND COMMERCE REBUILD
 =========================================
 
 This repo is a full light-mode rebuild of Cisca Makeovers around four connected customer journeys:
@@ -71,14 +71,3 @@ DEPLOYMENT CHECKLIST
 8. Update an order status in admin and test the Track Order button in the customer email.
 9. Test public order tracking with order + email and order + phone.
 10. Review the site at mobile, tablet and desktop widths before launch.
-
-
-VISUAL UPDATE NOTES
--------------------
-- Non-gallery campaign imagery now uses Unsplash URLs from images.js with search comments for replacement.
-- The gallery keeps its local lookbook images.
-- The mobile header uses Font Awesome icons and hides while scrolling down then returns while scrolling up.
-- Booking no longer uses a sticky step bar or fixed mobile appointment bar.
-- Booking date selection moves the user to available times and stage changes return to the active section.
-- Booking supports up to four inspiration photos through the existing Cloudinary environment.
-- Paystack remains server-side initialized and verified. The existing Resend flow sends payment confirmations.

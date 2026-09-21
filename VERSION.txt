@@ -1,3 +1,4 @@
-2.1.0
-
-Visual and mobile rebuild: responsive header, booking flow, beauty imagery, shop filters, product detail and admin polish.
+Cisca Makeovers Brand Commerce Rebuild
+September 2026
+Visual direction: premium beauty retail + studio + academy
+Architecture: See it · Wear it · Learn it · Shop it
