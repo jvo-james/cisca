@@ -115,7 +115,7 @@ function productCard(p,{eager=false}={}){
       <strong class="product-price">${p.price!=null?money(p.price):'Coming soon'}</strong>
       <div class="product-card-actions">
         <button class="card-quick" type="button" data-quick="${p.id}" ${!ready?'disabled':''}>${ready?'Quick add':'Coming soon'}</button>
-        <a class="card-view" href="product.html?id=${encodeURIComponent(p.id)}" aria-label="View ${escapeHtml(p.name)}"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        <a class="card-view" href="product.html?id=${encodeURIComponent(p.id)}" aria-label="View ${escapeHtml(p.name)}">→</a>
       </div>
     </div>
   </article>`;
@@ -257,6 +257,26 @@ document.querySelectorAll('[data-quick-close]').forEach(b=>b.addEventListener('c
 document.querySelector('[data-qty-minus]')?.addEventListener('click',()=>{quickQty=Math.max(1,quickQty-1);updateQuickTotal();});
 document.querySelector('[data-qty-plus]')?.addEventListener('click',()=>{quickQty=Math.min(20,quickQty+1);updateQuickTotal();});
 document.querySelector('[data-quick-submit]')?.addEventListener('click',addQuick);
+
+// Add a real thumb-friendly search control to the compact mobile shop header.
+if(matchMedia('(max-width:680px)').matches){
+  const navRight=document.querySelector('.shop-page .nav-right');
+  const bagButton=navRight?.querySelector('[data-bag-open]');
+  if(navRight && bagButton && !navRight.querySelector('.shop-mobile-search')){
+    const searchButton=document.createElement('button');
+    searchButton.type='button';
+    searchButton.className='shop-mobile-search';
+    searchButton.setAttribute('aria-label','Search products');
+    searchButton.textContent='⌕';
+    searchButton.addEventListener('click',()=>{
+      const overlay=document.querySelector('[data-search-overlay]');
+      overlay?.classList.add('open');
+      document.body.classList.add('overlay-open');
+      setTimeout(()=>document.querySelector('[data-site-search]')?.focus(),80);
+    });
+    navRight.insertBefore(searchButton,bagButton);
+  }
+}
 
 renderFavourites();
 render();

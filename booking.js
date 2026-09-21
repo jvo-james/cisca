@@ -12,7 +12,8 @@ const calendarLabel = document.querySelector('[data-calendar-label]');
 const calendarNote = document.querySelector('[data-calendar-note]');
 const timeSlotsEl = document.querySelector('[data-time-slots]');
 const timesHeading = document.querySelector('[data-times-heading]');
-const calendarSelected = document.querySelector('[data-calendar-selected]');
+const mobileBar = document.querySelector('[data-mobile-summary-bar]');
+const mobileSheet = document.querySelector('[data-mobile-summary-sheet]');
 
 let services = SERVICE_SEED;
 try {
@@ -179,39 +180,28 @@ function renderServices() {
   }));
 }
 
-function scrollToBookingTarget(element, gap = 16) {
-  if (!element) return;
-  const header = document.querySelector('[data-main-header]');
-  const headerHeight = header ? header.getBoundingClientRect().height : 0;
-  const top = element.getBoundingClientRect().top + window.scrollY - headerHeight - gap;
-  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
-}
-
-function revealStageAction() {
-  const action = document.querySelector('[data-stage="1"] .stage-actions');
-  if (!action) return;
-  const rect = action.getBoundingClientRect();
-  const safeBottom = window.innerHeight - 20;
-  if (rect.bottom > safeBottom) {
-    window.scrollBy({ top: rect.bottom - safeBottom, behavior: 'smooth' });
-  }
-}
-
 function selectService(id) {
   selectedServiceId = id;
   selectedTime = '';
   form.time.value = '';
-  renderServices();
+
+  // Keep the user's scroll position stable when selecting a service.
+  picker.querySelectorAll('[data-service-id]').forEach(card => {
+    const selected = card.dataset.serviceId === id;
+    card.classList.toggle('selected', selected);
+    const label = card.querySelector('.service-select-text');
+    if (label) label.textContent = selected ? 'Selected' : 'Select service';
+  });
+
   updateSummary();
   if (selectedDate) renderTimes();
-  requestAnimationFrame(() => revealStageAction());
 }
 
 function openLook(service) {
   if (!service) return;
   const modal = document.createElement('div');
   modal.className = 'look-modal';
-  modal.innerHTML = `<button class="look-modal-backdrop" type="button" aria-label="Close preview"></button><div class="look-modal-card"><img src="${serviceImage(service)}" alt="${service.name}"><button class="look-modal-close" type="button" aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button><div class="look-modal-copy"><span class="booking-kicker">Example look</span><h3>${service.name}</h3><p>${service.description || ''}</p><button class="booking-primary" type="button" data-pick-preview>Choose this service</button></div></div>`;
+  modal.innerHTML = `<button class="look-modal-backdrop" type="button" aria-label="Close preview"></button><div class="look-modal-card"><img src="${serviceImage(service)}" alt="${service.name}"><button class="look-modal-close" type="button" aria-label="Close">×</button><div class="look-modal-copy"><span class="booking-kicker">Example look</span><h3>${service.name}</h3><p>${service.description || ''}</p><button class="booking-primary" type="button" data-pick-preview>Choose this service</button></div></div>`;
   document.body.append(modal);
   document.body.style.overflow = 'hidden';
   const close = () => { modal.remove(); document.body.style.overflow = ''; };
@@ -241,7 +231,6 @@ async function renderCalendar() {
   await loadMonth(currentMonth);
   const year = currentMonth.getFullYear(), month = currentMonth.getMonth();
   calendarLabel.textContent = new Intl.DateTimeFormat('en-GH', { month:'long', year:'numeric' }).format(currentMonth);
-  calendarSelected.textContent = selectedDate ? `Selected date: ${formatLongDate(selectedDate)}` : 'No date selected yet';
   const first = new Date(year, month, 1);
   const mondayOffset = (first.getDay() + 6) % 7;
   const gridStart = new Date(year, month, 1 - mondayOffset);
@@ -256,8 +245,8 @@ async function renderCalendar() {
     const tooFar = d > max;
     const closed = availability.closedDates.includes(value);
     const disabled = outside || past || tooFar || closed;
-    const availabilityClass = disabled ? 'unavailable' : 'available';
-    cells.push(`<button type="button" class="calendar-day ${availabilityClass} ${outside?'outside':''} ${value===selectedDate?'selected':''} ${ymd(today)===value?'today':''}" data-date="${value}" ${disabled?'disabled':''} aria-label="${formatLongDate(value)}">${d.getDate()}</button>`);
+    const available = !disabled && !outside;
+    cells.push(`<button type="button" class="calendar-day ${outside?'outside':''} ${available?'available':''} ${closed?'closed':''} ${value===selectedDate?'selected':''} ${ymd(today)===value?'today':''}" data-date="${value}" ${disabled?'disabled':''} aria-label="${formatLongDate(value)}">${d.getDate()}</button>`);
   }
   calendarEl.innerHTML = cells.join('');
   calendarEl.querySelectorAll('[data-date]:not(:disabled)').forEach(btn => btn.addEventListener('click', () => {
@@ -268,7 +257,7 @@ async function renderCalendar() {
     renderCalendar();
     renderTimes();
     updateSummary();
-    setTimeout(()=>scrollToBookingTarget(document.querySelector('.times-panel'),12),120);
+    setTimeout(()=>document.querySelector('.times-panel')?.scrollIntoView({behavior:'smooth',block:'start'}),120);
   }));
 }
 
@@ -341,7 +330,21 @@ function updateSummary() {
   const payOption = new FormData(form).get('paymentOption') || 'deposit';
   const due = payOption === 'deposit' ? deposit() : total();
   document.querySelector('[data-due-now]').textContent = service?.price != null ? money(due) : '';
+  document.querySelector('[data-mobile-service]').textContent = service?.name || 'Your appointment';
+  document.querySelector('[data-mobile-total]').textContent = service?.price != null ? money(total()) : 'Choose service';
+  mobileBar.hidden = !service;
   document.querySelectorAll('.payment-option').forEach(label => label.classList.toggle('selected', label.querySelector('input').checked));
+  renderMobileSummary();
+}
+
+function renderMobileSummary() {
+  const service = selectedService();
+  const locationType = new FormData(form).get('locationType') || 'Studio appointment';
+  document.querySelector('[data-mobile-summary-content]').innerHTML = `<h3>${service?.name || 'No service selected'}</h3>
+    <div class="sheet-line"><span>Date</span><strong>${selectedDate ? formatDate(selectedDate) : 'Not selected'}</strong></div>
+    <div class="sheet-line"><span>Time</span><strong>${selectedTime ? formatTime(selectedTime) : 'Not selected'}</strong></div>
+    <div class="sheet-line"><span>Location</span><strong>${locationType === 'Home appointment' ? 'Home service' : 'Cisca Studio'}</strong></div>
+    <div class="sheet-total"><span>Estimated total</span><strong>${service?.price != null ? money(total()) : 'Price on request'}</strong></div>`;
 }
 
 function renderReview() {
@@ -369,7 +372,7 @@ function renderReview() {
 function validateStage() {
   if (stage === 1 && !selectedServiceId) {
     toast('Choose a service to continue.');
-    scrollToBookingTarget(serviceSection,16);
+    serviceSection.scrollIntoView({ behavior:'smooth', block:'start' });
     return false;
   }
   if (stage === 2) {
@@ -395,7 +398,8 @@ function showStage(next) {
     button.classList.toggle('done', n < stage);
   });
   if (stage === 4) renderReview();
-  setTimeout(()=>{ const target=document.querySelector(`[data-stage="${stage}"]`); scrollToBookingTarget(target,16); }, 60);
+  const progress = document.querySelector('.booking-progress');
+  setTimeout(()=>{ const target=document.querySelector(`[data-stage="${stage}"]`); target?.scrollIntoView({behavior:'smooth',block:'start'}); }, 60);
 }
 
 occasionGrid.addEventListener('click', event => {
@@ -404,11 +408,11 @@ occasionGrid.addEventListener('click', event => {
   selectedOccasion = btn.dataset.occasion;
   renderOccasions();
   renderServices();
-  setTimeout(() => scrollToBookingTarget(serviceSection,16), 80);
+  setTimeout(() => serviceSection.scrollIntoView({ behavior:'smooth', block:'start' }), 80);
 });
 
-document.querySelector('[data-skip-occasion]').addEventListener('click', () => scrollToBookingTarget(serviceSection,16));
-document.querySelector('[data-change-service]').addEventListener('click', () => { showStage(1); setTimeout(() => scrollToBookingTarget(serviceSection,16),250); });
+document.querySelector('[data-skip-occasion]').addEventListener('click', () => serviceSection.scrollIntoView({ behavior:'smooth', block:'start' }));
+document.querySelector('[data-change-service]').addEventListener('click', () => { showStage(1); setTimeout(() => serviceSection.scrollIntoView({behavior:'smooth',block:'start'}),250); });
 
 document.querySelector('[data-calendar-prev]').addEventListener('click', async () => {
   const now = new Date();
@@ -437,6 +441,17 @@ document.querySelectorAll('[data-step-nav]').forEach(button => button.addEventLi
   if (target === stage + 1 && validateStage()) showStage(target);
 }));
 
+mobileBar.querySelector('[data-mobile-summary-open]').addEventListener('click', () => {
+  mobileSheet.classList.add('open');
+  mobileSheet.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+});
+document.querySelectorAll('[data-mobile-summary-close]').forEach(btn => btn.addEventListener('click', () => {
+  mobileSheet.classList.remove('open');
+  mobileSheet.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+}));
+
 async function uploadInspoPhotos(files){
   const chosen=[...files].slice(0,4);
   if(!chosen.length) return [];
@@ -458,61 +473,44 @@ const inspoPreview=document.querySelector('[data-inspo-preview]');
 let inspoFiles=[];
 let inspoPreviewUrls=[];
 
-function clearInspoPreviewUrls(){
+function renderInspoPreviews(){
   inspoPreviewUrls.forEach(url=>URL.revokeObjectURL(url));
   inspoPreviewUrls=[];
-}
-
-function renderInspoPreview(){
-  clearInspoPreviewUrls();
+  if(!inspoPreview) return;
   inspoPreview.innerHTML='';
-  if(!inspoFiles.length){
-    inspoPreview.innerHTML='<div class="inspo-empty"><i class="fa-regular fa-images" aria-hidden="true"></i><span>No photos added yet</span><small>A reference photo can help us understand the finish you like.</small></div>';
-    return;
-  }
   inspoFiles.forEach((file,index)=>{
+    const card=document.createElement('div');
+    card.className='inspo-preview-item';
+    const img=document.createElement('img');
+    img.alt='Inspiration preview';
     const url=URL.createObjectURL(file);
     inspoPreviewUrls.push(url);
-    const item=document.createElement('div');
-    item.className='inspo-item';
-    item.innerHTML=`<img src="${url}" alt="Inspiration photo ${index+1}"><button type="button" class="inspo-remove" data-inspo-remove="${index}" aria-label="Remove inspiration photo ${index+1}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>`;
-    inspoPreview.append(item);
+    img.src=url;
+    const remove=document.createElement('button');
+    remove.type='button';
+    remove.className='inspo-remove';
+    remove.setAttribute('aria-label',`Remove inspiration photo ${index+1}`);
+    remove.innerHTML='<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+    remove.addEventListener('click',()=>{
+      inspoFiles.splice(index,1);
+      renderInspoPreviews();
+    });
+    card.append(img,remove);
+    inspoPreview.append(card);
   });
 }
 
 inspoInput?.addEventListener('change',()=>{
   const incoming=[...(inspoInput.files||[])];
-  const valid=[];
-  for(const file of incoming){
-    if(!['image/jpeg','image/png','image/webp'].includes(file.type)){
-      toast('Please choose JPG, PNG or WEBP images.');
-      continue;
-    }
-    if(file.size>8*1024*1024){
-      toast('Each inspiration photo must be under 8 MB.');
-      continue;
-    }
-    const duplicate=inspoFiles.some(existing => existing.name===file.name && existing.size===file.size && existing.lastModified===file.lastModified);
-    if(!duplicate) valid.push(file);
-  }
-  const slots=Math.max(0,4-inspoFiles.length);
-  inspoFiles.push(...valid.slice(0,slots));
-  if(valid.length>slots) toast('You can add up to 4 inspiration photos.');
+  const remaining=4-inspoFiles.length;
+  const accepted=incoming.slice(0,Math.max(0,remaining)).filter(file=>file.type.startsWith('image/'));
+  if(incoming.length>accepted.length && typeof toast==='function') toast('You can add up to 4 inspiration photos.');
+  const tooLarge=accepted.filter(file=>file.size>8*1024*1024);
+  if(tooLarge.length && typeof toast==='function') toast('Each inspiration photo must be under 8 MB.');
+  inspoFiles=[...inspoFiles,...accepted.filter(file=>file.size<=8*1024*1024)].slice(0,4);
   inspoInput.value='';
-  renderInspoPreview();
+  renderInspoPreviews();
 });
-
-inspoPreview?.addEventListener('click',event=>{
-  const button=event.target.closest('[data-inspo-remove]');
-  if(!button) return;
-  const index=Number(button.dataset.inspoRemove);
-  if(Number.isInteger(index)){
-    inspoFiles.splice(index,1);
-    renderInspoPreview();
-  }
-});
-
-renderInspoPreview();
 form.addEventListener('submit', async event => {
   event.preventDefault();
   if (!validateStage() || !selectedServiceId) return;

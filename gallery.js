@@ -16,7 +16,7 @@ const grid=document.querySelector('[data-gallery]'),filters=document.querySelect
 let active='All';
 function render(){
   const rows=looks.filter(x=>active==='All'||x[1]===active);
-  grid.innerHTML=rows.map(x=>`<a class="look-item" href="booking.html?service=${encodeURIComponent(x[3])}&occasion=${encodeURIComponent(x[4])}"><img src="${x[0]}" alt="${x[2]}" loading="lazy"><div class="look-caption"><span>${x[1]}</span><h3>${x[2]}</h3><span>Book this look <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span></div></a>`).join('');
+  grid.innerHTML=rows.map(x=>`<a class="look-item" href="booking.html?service=${encodeURIComponent(x[3])}&occasion=${encodeURIComponent(x[4])}"><img src="${x[0]}" alt="${x[2]}" loading="lazy"><div class="look-caption"><span>${x[1]}</span><h3>${x[2]}</h3><span>Book this look →</span></div></a>`).join('');
   filters.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.filter===active));
 }
 filters.addEventListener('click',e=>{const b=e.target.closest('button');if(b){active=b.dataset.filter;render()}});

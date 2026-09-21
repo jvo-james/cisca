@@ -1,13 +1,6 @@
 import { CISCA_CONFIG, money } from './config.js';
 import { PRODUCT_SEED } from './catalog.js';
 import { IMAGES } from './images.js';
-const menuIcon = (open=false) => open
-  ? '<svg class="menu-svg menu-svg-close" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 5L19 19M19 5L5 19"></path></svg>'
-  : '<svg class="menu-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 7H21M3 12H21M3 17H21"></path></svg>';
-const closeIcon = '<svg class="close-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 5L19 19M19 5L5 19"></path></svg>';
-const bagIcon = '<svg class="bag-svg" viewBox="0 0 28 28" aria-hidden="true" focusable="false"><path d="M6 9.5h16l-1.1 13H7.1L6 9.5Z"></path><path d="M10 9.5V7a4 4 0 0 1 8 0v2.5"></path></svg>';
-const rightArrow = '<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>';
-
 const header=`<header class="site-header" data-main-header>
 <div class="wrap nav-row">
 <nav class="nav-left" aria-label="Main navigation">
@@ -25,52 +18,52 @@ const header=`<header class="site-header" data-main-header>
 </div></div></span>
 <a class="nav-link" href="academy.html">Academy</a><a class="nav-link" href="gallery.html">Looks</a><a class="nav-link" href="about.html">About</a>
 </nav>
-<button class="menu-btn" data-menu aria-label="Open menu" aria-expanded="false">${menuIcon(false)}</button>
+<button class="menu-btn" data-menu aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
 <a class="brand" href="index.html">Cisca Makeovers<small>Beauty Studio</small></a>
-<nav class="nav-right"><button class="nav-action" data-search-open><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Search</span></button><a class="nav-action" href="booking.html"><i class="fa-regular fa-calendar-check" aria-hidden="true"></i><span>Book</span></a><button class="nav-action bag-button" data-bag-open aria-label="Open bag">${bagIcon}<span class="bag-label">Bag</span><sup class="cart-count" data-cart-count>0</sup></button></nav>
+<nav class="nav-right"><button class="nav-action" data-search-open><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Search</button><a class="nav-action" href="booking.html"><i class="fa-regular fa-calendar-check" aria-hidden="true"></i> Book</a><button class="nav-action bag-button" data-bag-open aria-label="Open bag"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.5 8.5h11l1 11h-13l1-11Z"></path><path d="M9 8.5a3 3 0 0 1 6 0"></path></svg><span class="cart-count" data-cart-count>0</span></button></nav>
 </div></header>
 <div class="mobile-menu" data-mobile-menu>
-<a href="shop.html">Shop <span class="menu-arrow" aria-hidden="true">${rightArrow}</span></a><div class="mobile-shop-cats"><a href="shop.html?category=Makeup">Makeup</a><a href="shop.html?category=Nails">Nails</a><a href="shop.html?category=Brow%20%26%20Lash">Brows & lashes</a><a href="shop.html?category=Hair">Hair</a></div>
-<a href="services.html">Services <span class="menu-arrow" aria-hidden="true">${rightArrow}</span></a><a href="booking.html">Book Cisca <span class="menu-arrow" aria-hidden="true">${rightArrow}</span></a><a href="academy.html">Academy <span class="menu-arrow" aria-hidden="true">${rightArrow}</span></a><a href="gallery.html">Lookbook <span class="menu-arrow" aria-hidden="true">${rightArrow}</span></a><a href="about.html">About <span class="menu-arrow" aria-hidden="true">${rightArrow}</span></a><a href="track.html">Track order <span class="menu-arrow" aria-hidden="true">${rightArrow}</span></a>
+<a href="shop.html">Shop <span aria-hidden="true">→</span></a><div class="mobile-shop-cats"><a href="shop.html?category=Makeup">Makeup</a><a href="shop.html?category=Nails">Nails</a><a href="shop.html?category=Brow%20%26%20Lash">Brows & lashes</a><a href="shop.html?category=Hair">Hair</a></div>
+<a href="services.html">Services <span aria-hidden="true">→</span></a><a href="booking.html">Book Cisca <span aria-hidden="true">→</span></a><a href="academy.html">Academy <span aria-hidden="true">→</span></a><a href="gallery.html">Lookbook <span aria-hidden="true">→</span></a><a href="about.html">About <span aria-hidden="true">→</span></a><a href="track.html">Track order <span aria-hidden="true">→</span></a>
 <button class="nav-action" data-search-open>Search products</button><div class="mobile-meta"><a href="${CISCA_CONFIG.instagram}" target="_blank">Instagram</a><a href="https://wa.me/${CISCA_CONFIG.whatsapp}" target="_blank">WhatsApp</a><a href="${CISCA_CONFIG.youtube}" target="_blank">YouTube</a></div></div>
-<div class="search-overlay" data-search-overlay><div class="search-panel"><div class="overlay-head"><h2>Search beauty</h2><button class="icon-btn" data-search-close aria-label="Close search">${closeIcon}</button></div><input class="site-search" data-site-search placeholder="Search products, tools, lashes, hair..."><div class="search-results" data-search-results><div class="search-empty">Start typing to search the shop.</div></div></div></div>
-<div class="bag-drawer" data-bag-drawer><aside class="bag-panel"><div class="bag-head"><h2>Your bag</h2><button class="icon-btn" data-bag-close aria-label="Close bag">${closeIcon}</button></div><div class="bag-items" data-bag-items></div><div class="bag-foot"><div class="bag-total"><span>Subtotal</span><span data-bag-total>GH₵0.00</span></div><div class="bag-actions"><a class="btn btn-outline" href="cart.html">View bag</a><a class="btn" href="checkout.html">Checkout</a></div></div></aside></div>`;
+<div class="search-overlay" data-search-overlay><div class="search-panel"><div class="overlay-head"><h2>Search beauty</h2><button class="icon-btn" data-search-close aria-label="Close search">×</button></div><input class="site-search" data-site-search placeholder="Search products, tools, lashes, hair..."><div class="search-results" data-search-results><div class="search-empty">Start typing to search the shop.</div></div></div></div>
+<div class="bag-drawer" data-bag-drawer><aside class="bag-panel"><div class="bag-head"><h2>Your bag</h2><button class="icon-btn" data-bag-close aria-label="Close bag">×</button></div><div class="bag-items" data-bag-items></div><div class="bag-foot"><div class="bag-total"><span>Subtotal</span><span data-bag-total>GH₵0.00</span></div><div class="bag-actions"><a class="btn btn-outline" href="cart.html">View bag</a><a class="btn" href="checkout.html">Checkout</a></div></div></aside></div>`;
 const footer=`<footer class="site-footer">
 <div class="footer-social-strip"><a href="gallery.html"><img src="${IMAGES.beauty}" alt="Beauty look"></a><a href="gallery.html"><img src="${IMAGES.makeup}" alt="Beauty look"></a><a href="gallery.html"><img src="${IMAGES.nails}" alt="Beauty look"></a><a href="gallery.html"><img src="${IMAGES.hair}" alt="Beauty look"></a><a href="gallery.html"><img src="${IMAGES.lashes}" alt="Beauty look"></a><a href="gallery.html"><img src="${IMAGES.brows}" alt="Beauty look"></a></div>
 <div class="footer-main"><div class="wrap"><div class="footer-lead"><div><span class="eyebrow">More Cisca in your inbox</span><h2>Beauty news worth opening.</h2></div><div><p>New products, class dates, appointment openings and beauty inspiration, sent occasionally.</p><form class="newsletter" data-newsletter><input type="email" name="email" required placeholder="Email address"><button type="submit">Join</button></form></div></div>
 <div class="footer-grid"><div class="footer-brand">Cisca Makeovers<p>Beauty looks, appointments, classes and products in one place.</p></div><div class="footer-col"><h3>Shop</h3><a href="shop.html">All products</a><a href="shop.html?category=Makeup">Makeup</a><a href="shop.html?category=Brow%20%26%20Lash">Brows & lashes</a><a href="shop.html?category=Nails">Nails</a><a href="shop.html?category=Hair">Hair</a></div><div class="footer-col"><h3>Studio</h3><a href="services.html">Services</a><a href="booking.html">Book an appointment</a><a href="gallery.html">Lookbook</a></div><div class="footer-col"><h3>Academy</h3><a href="academy.html">Classes</a><a href="student-resources.html">Student resources</a><a href="class-registration.html">Registration</a></div><div class="footer-col"><h3>Help</h3><a href="track.html">Track order</a><a href="contact.html">Contact</a><a href="about.html">About Cisca</a><a href="${CISCA_CONFIG.instagram}" target="_blank">Instagram</a></div></div>
-<div class="footer-bottom"><span>© ${new Date().getFullYear()} Cisca Makeovers</span><span>Beauty Studio</span></div></div></div></footer>`;
+<div class="footer-bottom"><span>© ${new Date().getFullYear()} Cisca Makeovers</span><span>Beauty Studio · Ghana</span></div></div></div></footer>`;
 document.querySelector('[data-site-header]')?.insertAdjacentHTML('afterbegin',header);document.querySelector('[data-site-footer]')?.insertAdjacentHTML('afterbegin',footer);
-const menu=document.querySelector('[data-mobile-menu]');
-document.querySelector('[data-menu]')?.addEventListener('click',()=>{
-  const button=document.querySelector('[data-menu]');
+const menu=document.querySelector('[data-mobile-menu]');document.querySelector('[data-menu]')?.addEventListener('click',()=>{
   const open=menu?.classList.toggle('open');
   document.body.classList.toggle('nav-open',!!open);
-  button?.setAttribute('aria-expanded',String(!!open));
-  button?.setAttribute('aria-label',open?'Close menu':'Open menu');
-  if(button) button.innerHTML=menuIcon(!!open);
-  if(open) document.querySelector('[data-main-header]')?.classList.remove('nav-hidden');
+  const b=document.querySelector('[data-menu]');
+  b?.setAttribute('aria-expanded',String(!!open));
+  if(b) b.innerHTML=open?'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"></path></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>';
 });
 let lastScroll=window.scrollY;
-function updateHeaderVisibility(){
+let scrollTicking=false;
+const handleHeaderScroll=()=>{
   const header=document.querySelector('[data-main-header]');
+  scrollTicking=false;
   if(!header || document.body.classList.contains('nav-open')) return;
   const y=Math.max(0,window.scrollY);
   const delta=y-lastScroll;
-  if(y<=12 || delta< -1){
+  if(y<=24){
     header.classList.remove('nav-hidden');
-  }else if(y>84 && delta>1){
+  }else if(delta>6 && y>76){
     header.classList.add('nav-hidden');
+  }else if(delta<-4){
+    header.classList.remove('nav-hidden');
   }
   lastScroll=y;
-}
-window.addEventListener('scroll',updateHeaderVisibility,{passive:true});
-window.addEventListener('wheel',updateHeaderVisibility,{passive:true});
-window.addEventListener('touchmove',updateHeaderVisibility,{passive:true});
-window.addEventListener('resize',()=>{
-  document.querySelector('[data-main-header]')?.classList.remove('nav-hidden');
-  lastScroll=window.scrollY;
+};
+window.addEventListener('scroll',()=>{
+  if(scrollTicking) return;
+  scrollTicking=true;
+  requestAnimationFrame(handleHeaderScroll);
 },{passive:true});
+window.addEventListener('touchend',()=>{ lastScroll=window.scrollY; },{passive:true});
 export function getCart(){try{return JSON.parse(localStorage.getItem('cisca_cart')||'[]')}catch{return[]}}export function saveCart(cart){localStorage.setItem('cisca_cart',JSON.stringify(cart));updateCartCount();renderBag()}export function updateCartCount(){const count=getCart().reduce((n,i)=>n+Number(i.qty||1),0);document.querySelectorAll('[data-cart-count]').forEach(el=>el.textContent=count)}
 function renderBag(){const items=document.querySelector('[data-bag-items]'),total=document.querySelector('[data-bag-total]');if(!items)return;const cart=getCart();items.innerHTML=cart.length?cart.map(i=>`<div class="bag-item"><img src="${i.image||IMAGES.beauty}" alt="${i.name}"><div><h3>${i.name}</h3><small>${i.category||'Beauty'} · Qty ${i.qty||1}</small></div><strong>${money(Number(i.price||0)*Number(i.qty||1))}</strong></div>`).join(''):'<div class="empty-state">Your bag is empty.</div>';if(total)total.textContent=money(cart.reduce((n,i)=>n+Number(i.price||0)*Number(i.qty||1),0))}updateCartCount();renderBag();
 const bag=document.querySelector('[data-bag-drawer]');document.querySelectorAll('[data-bag-open]').forEach(b=>b.addEventListener('click',()=>{bag?.classList.add('open');document.body.classList.add('overlay-open');renderBag()}));document.querySelector('[data-bag-close]')?.addEventListener('click',()=>{bag?.classList.remove('open');document.body.classList.remove('overlay-open')});bag?.addEventListener('click',e=>{if(e.target===bag){bag.classList.remove('open');document.body.classList.remove('overlay-open')}});

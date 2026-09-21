@@ -59,31 +59,31 @@
           <div class="occasion-grid" data-occasion-grid>
             <button type="button" class="occasion-card" data-occasion="Birthday">
               <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85" alt="Birthday beauty look" loading="lazy">
-              <span>Birthday</span><i class="occasion-check fa-solid fa-check" aria-hidden="true"></i>
+              <span>Birthday</span>
             </button>
             <button type="button" class="occasion-card" data-occasion="Wedding">
               <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=85" alt="Bridal makeup look" loading="lazy">
-              <span>Wedding</span><i class="occasion-check fa-solid fa-check" aria-hidden="true"></i>
+              <span>Wedding</span>
             </button>
             <button type="button" class="occasion-card" data-occasion="Graduation">
               <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85" alt="Graduation makeup look" loading="lazy">
-              <span>Graduation</span><i class="occasion-check fa-solid fa-check" aria-hidden="true"></i>
+              <span>Graduation</span>
             </button>
             <button type="button" class="occasion-card" data-occasion="Photoshoot">
               <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85" alt="Photoshoot beauty look" loading="lazy">
-              <span>Photoshoot</span><i class="occasion-check fa-solid fa-check" aria-hidden="true"></i>
+              <span>Photoshoot</span>
             </button>
             <button type="button" class="occasion-card" data-occasion="Date / Event">
               <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85" alt="Event makeup look" loading="lazy">
-              <span>Date / Event</span><i class="occasion-check fa-solid fa-check" aria-hidden="true"></i>
+              <span>Date / Event</span>
             </button>
             <button type="button" class="occasion-card" data-occasion="Just because">
               <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85" alt="Cisca signature makeup look" loading="lazy">
-              <span>Just because</span><i class="occasion-check fa-solid fa-check" aria-hidden="true"></i>
+              <span>Just because</span>
             </button>
           </div>
 
-          <button type="button" class="skip-occasion" data-skip-occasion>I already know what I want <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>
+          <button type="button" class="skip-occasion" data-skip-occasion>I already know what I want <span>↓</span></button>
 
           <div class="service-section" data-service-section>
             <div class="service-section-head">
@@ -98,7 +98,7 @@
           </div>
 
           <div class="stage-actions stage-actions-end">
-            <button type="button" class="booking-primary" data-next>Choose a date <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <button type="button" class="booking-primary" data-next>Choose a date <span>→</span></button>
           </div>
         </section>
 
@@ -117,11 +117,10 @@
                 <div>
                   <span class="booking-kicker">Pick your date</span>
                   <h3 data-calendar-label></h3>
-                  <p class="calendar-selected" data-calendar-selected>No date selected yet</p>
                 </div>
                 <div class="calendar-arrows">
-                  <button type="button" data-calendar-prev aria-label="Previous month"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
-                  <button type="button" data-calendar-next aria-label="Next month"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+                  <button type="button" data-calendar-prev aria-label="Previous month">←</button>
+                  <button type="button" data-calendar-next aria-label="Next month">→</button>
                 </div>
               </div>
               <div class="calendar-week" aria-hidden="true">
@@ -148,12 +147,12 @@
             <div class="location-options">
               <label class="location-option selected">
                 <input type="radio" name="locationType" value="Studio appointment" checked>
-                <span class="location-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>
+                <span class="location-check">✓</span>
                 <span><strong>Cisca Studio</strong><small>Come to the studio .</small></span>
               </label>
               <label class="location-option">
                 <input type="radio" name="locationType" value="Home appointment">
-                <span class="location-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>
+                <span class="location-check">✓</span>
                 <span><strong>Home service</strong><small>We’ll come to you. Travel charges may apply.</small></span>
               </label>
             </div>
@@ -164,8 +163,8 @@
           </div>
 
           <div class="stage-actions">
-            <button type="button" class="booking-secondary" data-back><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back</button>
-            <button type="button" class="booking-primary" data-next>Continue <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <button type="button" class="booking-secondary" data-back>← Back</button>
+            <button type="button" class="booking-primary" data-next>Continue <span>→</span></button>
           </div>
         </section>
 
@@ -201,30 +200,28 @@
           <div class="client-notes">
             <span class="booking-kicker">Anything Cisca should know?</span>
             <div class="note-prompts" data-note-prompts>
-              <button type="button" data-note="Please note my skin is sensitive">Sensitive skin</button>
+              <button type="button" data-note="I have sensitive skin">Sensitive skin</button>
               <button type="button" data-note="This is my first appointment">First appointment</button>
-              <button type="button" data-note="This is for a special occasion">Special occasion</button>
+              <button type="button" data-note="It's for a special occasion">Special occasion</button>
             </div>
             <label class="sr-only" for="booking-notes">Appointment notes</label>
             <textarea id="booking-notes" name="notes" rows="4" placeholder="Anything else you’d like Cisca to know?"></textarea>
             <div class="inspo-upload">
-              <div class="inspo-head">
+              <div class="inspo-upload-head">
                 <div>
                   <span class="booking-kicker">Inspiration photos</span>
-                  <h3>Show us the look.</h3>
-                  <p>Add a photo when you have a reference in mind.</p>
+                  <p>Optional. Add up to 4 photos so Cisca can see the look you have in mind.</p>
                 </div>
                 <label class="inspo-add" for="inspo-photos"><i class="fa-solid fa-plus" aria-hidden="true"></i><span>Add photos</span></label>
               </div>
-              <input id="inspo-photos" class="inspo-input" type="file" name="inspoPhotos" accept="image/jpeg,image/png,image/webp" multiple>
+              <input id="inspo-photos" type="file" name="inspoPhotos" accept="image/jpeg,image/png,image/webp" multiple hidden>
               <div class="inspo-preview" data-inspo-preview aria-live="polite"></div>
-              <p class="inspo-hint">Optional. Up to 4 JPG, PNG or WEBP images.</p>
             </div>
           </div>
 
           <div class="stage-actions">
-            <button type="button" class="booking-secondary" data-back><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back</button>
-            <button type="button" class="booking-primary" data-next>Review appointment <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <button type="button" class="booking-secondary" data-back>← Back</button>
+            <button type="button" class="booking-primary" data-next>Review appointment <span>→</span></button>
           </div>
         </section>
 
@@ -255,7 +252,7 @@
           </div>
 
           <div class="stage-actions">
-            <button type="button" class="booking-secondary" data-back><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back</button>
+            <button type="button" class="booking-secondary" data-back>← Back</button>
             <button class="booking-primary booking-pay" data-submit>Secure my appointment <span data-due-now></span></button>
           </div>
         </section>
@@ -275,7 +272,7 @@
           </div>
           <div class="summary-total"><span>Estimated total</span><strong data-sum-total>GH₵0.00</strong></div>
           <button type="button" class="summary-change" data-change-service hidden>Change service</button>
-          <a class="summary-help" data-summary-help target="_blank" rel="noopener">Need help? Chat with us on WhatsApp <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <a class="summary-help" data-summary-help target="_blank" rel="noopener">Need help? Chat with us on WhatsApp →</a>
         </div>
       </aside>
     </section>
@@ -289,6 +286,21 @@
       </div>
     </section>
   </main>
+
+  <div class="mobile-booking-bar" data-mobile-summary-bar hidden>
+    <button type="button" data-mobile-summary-open>
+      <span><small data-mobile-service>Appointment</small><strong data-mobile-total>GH₵0.00</strong></span>
+      <b>View ↑</b>
+    </button>
+  </div>
+  <div class="mobile-summary-sheet" data-mobile-summary-sheet aria-hidden="true">
+    <button type="button" class="sheet-backdrop" data-mobile-summary-close aria-label="Close appointment summary"></button>
+    <div class="sheet-panel">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head"><span>Your appointment</span><button type="button" data-mobile-summary-close>×</button></div>
+      <div class="sheet-body" data-mobile-summary-content></div>
+    </div>
+  </div>
 
   <div data-site-footer></div>
   <script type="module" src="shared.js"></script>
