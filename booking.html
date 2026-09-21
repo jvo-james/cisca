@@ -3,97 +3,111 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Book an Appointment | Cisca Makeovers</title>
-  <meta name="description" content="Choose a Cisca Makeovers service, date and time then secure your appointment.">
+  <title>Book Cisca | Beauty Appointment</title>
+  <meta name="description" content="Choose your Cisca Makeovers service, date and time, then secure your appointment online.">
   <link rel="stylesheet" href="base.css">
   <link rel="stylesheet" href="booking.css">
-</head>
-<body class="booking-body">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"><script>document.documentElement.classList.add("fa-ready")</script></head>
+<body>
   <div data-site-header></div>
 
   <main class="booking-page">
     <section class="booking-intro wrap">
       <div>
-        <span class="booking-kicker">Book an appointment</span>
-        <h1>Let’s get you ready.</h1>
-        <p>Pick your service, find a time and send through a few details.</p>
+        <span class="booking-kicker">Book Cisca</span>
+        <h1>Your appointment starts here.</h1>
+        <p>Choose your service, date and preferred time.</p>
       </div>
       <a class="booking-help" data-booking-help target="_blank" rel="noopener">
         <span>Need help?</span>
-        Message us <i class="fab fa-whatsapp"></i>
+        WhatsApp us
       </a>
     </section>
 
-    <div class="wrap booking-progress" aria-label="Booking progress">
-      <button type="button" class="progress-step active" data-step-nav="1">
-        <span>01</span><strong>Service</strong><small data-progress-service>Choose your service</small>
-      </button>
-      <button type="button" class="progress-step" data-step-nav="2">
-        <span>02</span><strong>Date &amp; time</strong><small data-progress-date>Choose a day</small>
-      </button>
-      <button type="button" class="progress-step" data-step-nav="3">
-        <span>03</span><strong>Details</strong><small>Your details</small>
-      </button>
-      <button type="button" class="progress-step" data-step-nav="4">
-        <span>04</span><strong>Review</strong><small>Check and pay</small>
-      </button>
-    </div>
+    <nav class="booking-progress" aria-label="Booking progress">
+      <div class="wrap booking-progress-inner">
+        <button type="button" class="progress-step active" data-step-nav="1">
+          <span>01</span><strong>Service</strong><small data-progress-service>Choose your look</small>
+        </button>
+        <button type="button" class="progress-step" data-step-nav="2">
+          <span>02</span><strong>Date &amp; time</strong><small data-progress-date>Pick a slot</small>
+        </button>
+        <button type="button" class="progress-step" data-step-nav="3">
+          <span>03</span><strong>Details</strong><small>A few details</small>
+        </button>
+        <button type="button" class="progress-step" data-step-nav="4">
+          <span>04</span><strong>Review</strong><small>Check &amp; pay</small>
+        </button>
+      </div>
+    </nav>
 
-    <section class="wrap booking-shell">
-      <div class="mobile-booking-summary" data-mobile-summary></div>
-
+    <section class="wrap booking-layout">
       <form class="booking-form" data-booking-form novalidate>
         <input type="hidden" name="date">
         <input type="hidden" name="time">
         <input type="hidden" name="occasion">
-        <input type="hidden" name="inspoImages">
 
-        <section class="booking-stage active" data-stage="1" data-stage-anchor>
+        <section class="booking-stage active" data-stage="1">
           <header class="stage-heading">
-            <div class="stage-number">01</div>
+            <span class="stage-number">01</span>
             <div>
-              <span class="booking-kicker">Start here</span>
-              <h2>What are you getting ready for?</h2>
-              <p>Choose a moment if you want a few recommendations. You can skip it.</p>
+              <h2>What are we getting you ready for?</h2>
+              <p>Pick the moment and we’ll help you narrow down the right service.</p>
             </div>
           </header>
 
           <div class="occasion-grid" data-occasion-grid>
-            <button type="button" class="occasion-card" data-occasion="Birthday"><img data-image="bridal" src="" alt="Birthday beauty"><span>Birthday</span></button>
-            <button type="button" class="occasion-card" data-occasion="Wedding"><img data-image="graduation" src="" alt="Wedding beauty"><span>Wedding</span></button>
-            <button type="button" class="occasion-card" data-occasion="Graduation"><img data-image="birthday" src="" alt="Graduation beauty"><span>Graduation</span></button>
-            <button type="button" class="occasion-card" data-occasion="Photoshoot"><img data-image="engagement" src="" alt="Photoshoot beauty"><span>Photoshoot</span></button>
-            <button type="button" class="occasion-card" data-occasion="Date / Event"><img data-image="photoshoot" src="" alt="Event beauty"><span>Date / event</span></button>
-            <button type="button" class="occasion-card" data-occasion="Just because"><img data-image="beauty" src="" alt="Soft glam beauty"><span>Just because</span></button>
+            <button type="button" class="occasion-card" data-occasion="Birthday">
+              <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85" alt="Birthday beauty look" loading="lazy">
+              <span>Birthday</span>
+            </button>
+            <button type="button" class="occasion-card" data-occasion="Wedding">
+              <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=85" alt="Bridal makeup look" loading="lazy">
+              <span>Wedding</span>
+            </button>
+            <button type="button" class="occasion-card" data-occasion="Graduation">
+              <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85" alt="Graduation makeup look" loading="lazy">
+              <span>Graduation</span>
+            </button>
+            <button type="button" class="occasion-card" data-occasion="Photoshoot">
+              <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85" alt="Photoshoot beauty look" loading="lazy">
+              <span>Photoshoot</span>
+            </button>
+            <button type="button" class="occasion-card" data-occasion="Date / Event">
+              <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85" alt="Event makeup look" loading="lazy">
+              <span>Date / Event</span>
+            </button>
+            <button type="button" class="occasion-card" data-occasion="Just because">
+              <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85" alt="Cisca signature makeup look" loading="lazy">
+              <span>Just because</span>
+            </button>
           </div>
 
-          <button type="button" class="skip-occasion" data-skip-occasion>Skip this step <i class="fas fa-arrow-down"></i></button>
+          <button type="button" class="skip-occasion" data-skip-occasion>I already know what I want <span>↓</span></button>
 
           <div class="service-section" data-service-section>
             <div class="service-section-head">
               <div>
                 <span class="booking-kicker" data-service-kicker>Choose your service</span>
                 <h3 data-service-heading>What are we doing today?</h3>
-                <p data-service-copy>Tap a service to choose it.</p>
+                <p data-service-copy>Choose the service that feels right for you.</p>
               </div>
+              <div class="service-tabs" data-service-tabs></div>
             </div>
-            <div class="service-tabs" data-service-tabs></div>
             <div class="service-picker" data-service-picker></div>
           </div>
 
-          <div class="stage-actions">
-            <span class="stage-hint">You can change your choice later.</span>
-            <button type="button" class="booking-primary" data-next>Choose a date <i class="fas fa-arrow-right"></i></button>
+          <div class="stage-actions stage-actions-end">
+            <button type="button" class="booking-primary" data-next>Choose a date <span>→</span></button>
           </div>
         </section>
 
-        <section class="booking-stage" data-stage="2" data-stage-anchor>
+        <section class="booking-stage" data-stage="2">
           <header class="stage-heading">
-            <div class="stage-number">02</div>
+            <span class="stage-number">02</span>
             <div>
-              <span class="booking-kicker">Find a time</span>
               <h2>When should we see you?</h2>
-              <p>Pick a day, then choose one of the open times.</p>
+              <p>Choose an available date, then pick the time that works best.</p>
             </div>
           </header>
 
@@ -101,120 +115,111 @@
             <div class="calendar-panel">
               <div class="calendar-head">
                 <div>
-                  <span class="booking-kicker">Calendar</span>
+                  <span class="booking-kicker">Pick your date</span>
                   <h3 data-calendar-label></h3>
                 </div>
                 <div class="calendar-arrows">
-                  <button type="button" data-calendar-prev aria-label="Previous month"><i class="fas fa-chevron-left"></i></button>
-                  <button type="button" data-calendar-next aria-label="Next month"><i class="fas fa-chevron-right"></i></button>
+                  <button type="button" data-calendar-prev aria-label="Previous month">←</button>
+                  <button type="button" data-calendar-next aria-label="Next month">→</button>
                 </div>
-              </div>
-              <div class="selected-date-strip">
-                <i class="far fa-calendar"></i>
-                <span data-selected-date>Choose a date</span>
               </div>
               <div class="calendar-week" aria-hidden="true">
                 <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
               </div>
               <div class="calendar-grid" data-calendar></div>
-              <p class="calendar-note" data-calendar-note>Closed dates are muted.</p>
+              <p class="calendar-note" data-calendar-note>Select a date to see available times.</p>
             </div>
 
-            <div class="times-panel" data-times-panel>
+            <div class="times-panel">
               <span class="booking-kicker">Available times</span>
               <h3 data-times-heading>Choose a date first</h3>
               <div class="time-slots" data-time-slots>
-                <p class="time-empty">Your available times will appear here.</p>
+                <p class="time-empty">Available times will appear here.</p>
               </div>
             </div>
           </div>
 
           <div class="location-section">
             <div class="location-heading">
-              <span class="booking-kicker">Appointment type</span>
+              <span class="booking-kicker">Appointment location</span>
               <h3>Where should we get you ready?</h3>
             </div>
             <div class="location-options">
               <label class="location-option selected">
                 <input type="radio" name="locationType" value="Studio appointment" checked>
-                <span class="location-check"><i class="fas fa-check"></i></span>
-                <span><strong>Studio appointment</strong><small>Studio details can be shared with your booking confirmation.</small></span>
+                <span class="location-check">✓</span>
+                <span><strong>Cisca Studio</strong><small>Come to the studio .</small></span>
               </label>
               <label class="location-option">
                 <input type="radio" name="locationType" value="Home appointment">
-                <span class="location-check"><i class="fas fa-check"></i></span>
-                <span><strong>Home service</strong><small>We come to you. Travel charges may apply.</small></span>
+                <span class="location-check">✓</span>
+                <span><strong>Home service</strong><small>We’ll come to you. Travel charges may apply.</small></span>
               </label>
             </div>
             <div class="home-address" data-home-address hidden>
-              <label for="booking-address">Where are you?</label>
-              <input id="booking-address" name="address" autocomplete="street-address" placeholder="Enter your area or address">
+              <label for="booking-address">What area are you in?</label>
+              <input id="booking-address" name="address" autocomplete="street-address" placeholder="Enter your neighbourhood or address">
             </div>
           </div>
 
           <div class="stage-actions">
-            <button type="button" class="booking-secondary" data-back><i class="fas fa-arrow-left"></i> Back</button>
-            <button type="button" class="booking-primary" data-next>Continue to details <i class="fas fa-arrow-right"></i></button>
+            <button type="button" class="booking-secondary" data-back>← Back</button>
+            <button type="button" class="booking-primary" data-next>Continue <span>→</span></button>
           </div>
         </section>
 
-        <section class="booking-stage" data-stage="3" data-stage-anchor>
+        <section class="booking-stage" data-stage="3">
           <header class="stage-heading">
-            <div class="stage-number">03</div>
+            <span class="stage-number">03</span>
             <div>
-              <span class="booking-kicker">A little about you</span>
-              <h2>Tell us what we need to know.</h2>
-              <p>These details help with your booking and any appointment updates.</p>
+              <h2>A few details about you.</h2>
+              <p>We’ll use these details for your booking confirmation and appointment updates.</p>
             </div>
           </header>
 
           <div class="details-grid">
-            <div class="booking-field"><label for="first-name">First name</label><input id="first-name" name="firstName" required autocomplete="given-name"></div>
-            <div class="booking-field"><label for="last-name">Last name</label><input id="last-name" name="lastName" required autocomplete="family-name"></div>
-            <div class="booking-field"><label for="booking-phone">Phone number</label><input id="booking-phone" name="phone" type="tel" required autocomplete="tel"></div>
-            <div class="booking-field"><label for="booking-email">Email address</label><input id="booking-email" name="email" type="email" required autocomplete="email"><small>We will send the receipt here.</small></div>
-          </div>
-
-          <div class="inspo-box">
-            <div class="inspo-copy">
-              <span class="booking-kicker">Bring your inspiration</span>
-              <h3>Have a photo you want us to see?</h3>
-              <p>Upload up to four inspiration photos. We will keep them with your booking.</p>
+            <div class="booking-field">
+              <label for="first-name">First name</label>
+              <input id="first-name" name="firstName" required autocomplete="given-name">
             </div>
-            <label class="upload-zone" for="inspo-files">
-              <i class="fas fa-cloud-upload-alt"></i>
-              <strong>Choose photo(s)</strong>
-              <span>JPG, PNG or WEBP · up to 5MB each</span>
-              <input id="inspo-files" type="file" accept="image/jpeg,image/png,image/webp" multiple data-inspo-files>
-            </label>
-            <div class="inspo-preview" data-inspo-preview></div>
-            <p class="upload-status" data-upload-status></p>
+            <div class="booking-field">
+              <label for="last-name">Last name</label>
+              <input id="last-name" name="lastName" required autocomplete="family-name">
+            </div>
+            <div class="booking-field">
+              <label for="booking-phone">Phone number</label>
+              <input id="booking-phone" name="phone" type="tel" required autocomplete="tel">
+            </div>
+            <div class="booking-field">
+              <label for="booking-email">Email address</label>
+              <input id="booking-email" name="email" type="email" required autocomplete="email">
+              <small>Your confirmation and appointment updates will be sent here.</small>
+            </div>
           </div>
 
           <div class="client-notes">
-            <span class="booking-kicker">Anything else?</span>
+            <span class="booking-kicker">Anything Cisca should know?</span>
             <div class="note-prompts" data-note-prompts>
               <button type="button" data-note="I have sensitive skin">Sensitive skin</button>
-              <button type="button" data-note="First appointment">First appointment</button>
-              <button type="button" data-note="It is for a special occasion">Special occasion</button>
+              <button type="button" data-note="I'm bringing inspiration photos">I have inspiration photos</button>
+              <button type="button" data-note="It's for a special occasion">Special occasion</button>
             </div>
             <label class="sr-only" for="booking-notes">Appointment notes</label>
-            <textarea id="booking-notes" name="notes" rows="4" placeholder="Anything else you would like us to know?"></textarea>
+            <textarea id="booking-notes" name="notes" rows="4" placeholder="Anything else you’d like Cisca to know?"></textarea><div class="inspo-upload"><label for="inspo-photos"><span>Inspiration photos</span><small>Optional. Add up to 4 JPG, PNG or WEBP images.</small></label><input id="inspo-photos" type="file" name="inspoPhotos" accept="image/jpeg,image/png,image/webp" multiple><div class="inspo-preview" data-inspo-preview></div></div>
           </div>
 
           <div class="stage-actions">
-            <button type="button" class="booking-secondary" data-back><i class="fas fa-arrow-left"></i> Back</button>
-            <button type="button" class="booking-primary" data-next>Review appointment <i class="fas fa-arrow-right"></i></button>
+            <button type="button" class="booking-secondary" data-back>← Back</button>
+            <button type="button" class="booking-primary" data-next>Review appointment <span>→</span></button>
           </div>
         </section>
 
-        <section class="booking-stage" data-stage="4" data-stage-anchor>
+        <section class="booking-stage" data-stage="4">
           <header class="stage-heading">
-            <div class="stage-number">04</div>
+            <span class="stage-number">04</span>
             <div>
-              <span class="booking-kicker">Nearly there</span>
-              <h2>Give it one last look.</h2>
-              <p>Check your details, choose your payment option then secure your appointment.</p>
+              <h2>Everything look good?</h2>
+              <p>Review your appointment, choose how you’d like to pay, then secure your time.</p>
             </div>
           </header>
 
@@ -222,52 +227,69 @@
 
           <div class="payment-choice">
             <span class="booking-kicker">Payment</span>
-            <h3>How would you like to pay?</h3>
+            <h3>Secure your appointment</h3>
             <label class="payment-option selected">
               <input type="radio" name="paymentOption" value="deposit" checked>
-              <span><strong>50% deposit</strong><small>Pay the rest later.</small></span>
+              <span><strong>Pay 50% deposit</strong><small>Pay the balance later.</small></span>
               <b data-deposit-price>GH₵0.00</b>
             </label>
             <label class="payment-option">
               <input type="radio" name="paymentOption" value="full">
-              <span><strong>Pay in full</strong><small>Take care of it now.</small></span>
+              <span><strong>Pay in full</strong><small>Take care of the full service amount now.</small></span>
               <b data-full-price>GH₵0.00</b>
             </label>
           </div>
 
           <div class="stage-actions">
-            <button type="button" class="booking-secondary" data-back><i class="fas fa-arrow-left"></i> Back</button>
-            <button class="booking-primary booking-pay" data-submit>Pay now <span data-due-now></span> <i class="fas fa-arrow-right"></i></button>
+            <button type="button" class="booking-secondary" data-back>← Back</button>
+            <button class="booking-primary booking-pay" data-submit>Secure my appointment <span data-due-now></span></button>
           </div>
         </section>
       </form>
 
       <aside class="appointment-summary" data-booking-summary>
-        <div class="summary-image"><img src="" data-summary-image alt="Selected beauty service"></div>
+        <div class="summary-image" data-summary-image>
+          <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=85" alt="Cisca beauty look">
+        </div>
         <div class="summary-content">
           <span class="booking-kicker">Your appointment</span>
           <h3 data-sum-services>No service selected</h3>
           <div class="summary-details">
             <div><span>Date</span><strong data-sum-date>Not selected</strong></div>
             <div><span>Time</span><strong data-sum-time>Not selected</strong></div>
-            <div><span>Type</span><strong data-sum-location>Studio appointment</strong></div>
+            <div><span>Location</span><strong data-sum-location>Cisca Studio</strong></div>
           </div>
           <div class="summary-total"><span>Estimated total</span><strong data-sum-total>GH₵0.00</strong></div>
           <button type="button" class="summary-change" data-change-service hidden>Change service</button>
-          <a class="summary-help" data-summary-help target="_blank" rel="noopener">Need help? <i class="fab fa-whatsapp"></i></a>
+          <a class="summary-help" data-summary-help target="_blank" rel="noopener">Need help? Chat with us on WhatsApp →</a>
         </div>
       </aside>
     </section>
 
     <section class="booking-reassurance">
       <div class="wrap reassurance-grid">
-        <div><span>01</span><h3>Your time</h3><p>Your payment holds the appointment while it is being confirmed.</p></div>
-        <div><span>02</span><h3>Your photos</h3><p>Send a few references so the look is easier to understand.</p></div>
-        <div><span>03</span><h3>Your details</h3><p>Use an email address you check so the receipt reaches you.</p></div>
-        <div><span>04</span><h3>Your updates</h3><p>Booking changes and status updates are sent to your contact details.</p></div>
+        <div><span>01</span><h3>Deposits</h3><p>Your payment secures the appointment. We verify it before confirming your booking.</p></div>
+        <div><span>02</span><h3>Changes</h3><p>Need to adjust your appointment? Contact Cisca as early as possible and we’ll help.</p></div>
+        <div><span>03</span><h3>Home service</h3><p>Travel charges depend on your location and can be confirmed before the appointment.</p></div>
+        <div><span>04</span><h3>Updates</h3><p>Use an email address you check. Booking confirmations and status updates are sent there.</p></div>
       </div>
     </section>
   </main>
+
+  <div class="mobile-booking-bar" data-mobile-summary-bar hidden>
+    <button type="button" data-mobile-summary-open>
+      <span><small data-mobile-service>Appointment</small><strong data-mobile-total>GH₵0.00</strong></span>
+      <b>View ↑</b>
+    </button>
+  </div>
+  <div class="mobile-summary-sheet" data-mobile-summary-sheet aria-hidden="true">
+    <button type="button" class="sheet-backdrop" data-mobile-summary-close aria-label="Close appointment summary"></button>
+    <div class="sheet-panel">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head"><span>Your appointment</span><button type="button" data-mobile-summary-close>×</button></div>
+      <div class="sheet-body" data-mobile-summary-content></div>
+    </div>
+  </div>
 
   <div data-site-footer></div>
   <script type="module" src="shared.js"></script>
