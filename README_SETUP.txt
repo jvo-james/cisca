@@ -1,4 +1,4 @@
-CISCA MAKEOVERS — BRAND COMMERCE REBUILD
+CISCA MAKEOVERS  -  BRAND COMMERCE REBUILD
 =========================================
 
 This repo is a full light-mode rebuild of Cisca Makeovers around four connected customer journeys:

@@ -1,10 +1,151 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cisca Admin</title><link rel="stylesheet" href="base.css"><link rel="stylesheet" href="admin.css"></head><body class="admin-body"><section class="admin-login" data-login><form class="login-card" data-login-form><span class="eyebrow">Private dashboard</span><h1>Cisca Admin</h1><div class="field"><label>Email</label><input name="email" type="email" required></div><div class="field" style="margin-top:14px"><label>Password</label><input name="password" type="password" required></div><button class="btn btn-rose" style="width:100%;margin-top:20px">Sign in</button><p data-login-error style="color:#9a3850;font-size:.85rem;margin-top:14px"></p></form></section><div class="admin-app" data-app hidden><aside class="admin-side"><div class="admin-brand">Cisca Makeovers</div><nav class="admin-nav" data-admin-nav><button data-view="overview" class="active">Overview</button><button data-view="orders">Orders</button><button data-view="bookings">Bookings</button><button data-view="students">Students</button><button data-view="products">Products</button><button data-view="classes">Classes</button><button data-view="services">Services</button><button data-view="availability">Availability</button><button data-view="inbox">Inbox</button></nav><button class="small-btn admin-logout" data-logout>Sign out</button></aside><main class="admin-main"><div class="admin-top"><div><span class="eyebrow">Dashboard</span><h1 data-view-title>Overview</h1></div><button class="small-btn" data-refresh>Refresh</button></div>
-<section class="admin-view active" data-section="overview"><div class="stat-grid" data-stats></div><div class="admin-panel"><h2>Recent activity</h2><div data-recent></div></div></section>
-<section class="admin-view" data-section="orders"><div class="admin-panel"><h2>Shop orders</h2><div data-orders></div></div></section>
-<section class="admin-view" data-section="bookings"><div class="admin-panel"><h2>Appointments</h2><div data-bookings></div></div></section>
-<section class="admin-view" data-section="students"><div class="admin-panel"><h2>Class registrations</h2><div data-students></div></div></section>
-<section class="admin-view" data-section="products"><div class="admin-panel"><h2>Product catalogue</h2><p>All supplied products start unavailable. Set a price and switch availability on when stock is ready.</p><div class="admin-actions"><button class="small-btn primary" data-seed>Load supplied product list</button></div><div data-products style="margin-top:18px"></div></div></section>
-<section class="admin-view" data-section="classes"><div class="admin-panel"><h2>Academy classes</h2><div data-classes></div></div></section>
-<section class="admin-view" data-section="services"><div class="admin-panel"><h2>Beauty services</h2><div data-services></div></div></section>
-<section class="admin-view" data-section="availability"><div class="admin-panel"><h2>Appointment availability</h2><p>Close a date completely or leave it open. Closed dates are rejected by the booking backend.</p><div class="edit-grid"><div class="field"><label>Date</label><input type="date" data-avail-date></div><div class="field"><label>Status</label><select data-avail-open><option value="true">Open</option><option value="false">Closed</option></select></div><div class="field"><label>Note</label><input data-avail-note placeholder="Optional internal note"></div></div><div class="admin-actions"><button class="small-btn primary" data-save-availability>Save availability</button></div><div data-availability-list style="margin-top:20px"></div></div></section><section class="admin-view" data-section="inbox"><div class="admin-panel"><h2>Messages & subscribers</h2><div data-inbox></div></div></section>
-</main></div><script type="module" src="admin.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cisca Admin</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+<section class="admin-login" data-login>
+  <div class="admin-login-image"><img data-image="beauty" alt="Beauty work"></div>
+  <form class="login-card" data-login-form>
+    <span class="eyebrow">Private dashboard</span>
+    <h1>Cisca Admin</h1>
+    <p class="login-note">Manage the website, bookings, shop, classes, services and settings from one place.</p>
+    <div class="field"><label for="admin-email">Email</label><input id="admin-email" name="email" type="email" autocomplete="email" required></div>
+    <div class="field"><label for="admin-password">Password</label><input id="admin-password" name="password" type="password" autocomplete="current-password" required></div>
+    <button class="btn btn-pink" type="submit" style="width:100%;margin-top:20px">Sign in <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+    <p data-login-error class="admin-error"></p>
+  </form>
+</section>
+
+<div class="admin-app" data-app hidden>
+  <aside class="admin-side">
+    <div class="admin-brand"><span>Cisca</span><small>Control room</small></div>
+    <nav class="admin-nav" data-admin-nav>
+      <button type="button" data-view="overview" class="active"><i class="fas fa-chart-line"></i> Overview</button>
+      <button type="button" data-view="settings"><i class="fas fa-sliders-h"></i> Site settings</button>
+      <button type="button" data-view="orders"><i class="fas fa-shopping-bag"></i> Orders</button>
+      <button type="button" data-view="bookings"><i class="fas fa-calendar-check"></i> Bookings</button>
+      <button type="button" data-view="students"><i class="fas fa-graduation-cap"></i> Students</button>
+      <button type="button" data-view="products"><i class="fas fa-box"></i> Products</button>
+      <button type="button" data-view="classes"><i class="fas fa-chalkboard-teacher"></i> Classes</button>
+      <button type="button" data-view="services"><i class="fas fa-magic"></i> Services</button>
+      <button type="button" data-view="availability"><i class="far fa-calendar-alt"></i> Availability</button>
+      <button type="button" data-view="inbox"><i class="fas fa-inbox"></i> Inbox</button>
+    </nav>
+    <button class="small-btn admin-logout" type="button" data-logout><i class="fas fa-sign-out-alt"></i> Sign out</button>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-top">
+      <div><span class="eyebrow">Dashboard</span><h1 data-view-title>Overview</h1></div>
+      <div class="admin-top-actions"><span data-save-note></span><button class="small-btn" type="button" data-refresh><i class="fas fa-sync-alt"></i> Refresh</button></div>
+    </div>
+
+    <section class="admin-view active" data-section="overview">
+      <div class="stat-grid" data-stats></div>
+      <div class="admin-two-col">
+        <div class="admin-panel"><h2>Recent activity</h2><div data-recent></div></div>
+        <div class="admin-panel"><h2>Quick notes</h2><p>Site settings control the public phone number, WhatsApp link, social links, hero copy, footer copy and the optional location label.</p><p>Product availability and price affect what customers can buy. Booking and class payments go through Paystack after the backend checks the details.</p></div>
+      </div>
+    </section>
+
+    <section class="admin-view" data-section="settings">
+      <div class="admin-panel">
+        <div class="panel-heading"><div><span class="eyebrow">Public website</span><h2>Site settings</h2></div><button class="small-btn primary" type="button" data-save-settings><i class="fas fa-save"></i> Save settings</button></div>
+        <form class="settings-form" data-settings-form></form>
+      </div>
+    </section>
+
+    <section class="admin-view" data-section="orders"><div class="admin-panel"><h2>Shop orders</h2><div data-orders></div></div></section>
+    <section class="admin-view" data-section="bookings"><div class="admin-panel"><h2>Appointments</h2><div data-bookings></div></div></section>
+    <section class="admin-view" data-section="students"><div class="admin-panel"><h2>Class registrations</h2><div data-students></div></div></section>
+
+    <section class="admin-view" data-section="products">
+      <div class="admin-panel">
+        <div class="panel-heading"><div><span class="eyebrow">Commerce</span><h2>Product catalogue</h2></div><button class="small-btn primary" type="button" data-seed="products"><i class="fas fa-layer-group"></i> Load supplied products</button></div>
+        <p class="admin-help">Change names, category, subcategory, pricing, copy, availability, featured status and product images. A product is purchasable only when it has a price and availability.</p>
+        <form class="create-form" data-new-product-form>
+          <div class="create-form-title"><strong>Add product</strong><span>Use a short ID such as soft-pink-blush.</span></div>
+          <div class="form-grid">
+            <div class="field"><label>ID</label><input name="id" required placeholder="product-id"></div>
+            <div class="field"><label>Name</label><input name="name" required></div>
+            <div class="field"><label>Category</label><input name="category" placeholder="Makeup, Nails, Hair..."></div>
+            <div class="field"><label>Subcategory</label><input name="subcategory" placeholder="Eyes, Lips, Tools..."></div>
+            <div class="field"><label>Price</label><input name="price" type="number" min="0" step="0.01"></div>
+            <div class="field"><label>Image URL</label><input name="image" placeholder="Optional Cloudinary or image URL"></div>
+            <div class="field full"><label>Description</label><textarea name="description" rows="3"></textarea></div>
+            <label class="check-field"><input name="available" type="checkbox" checked> Available now</label>
+            <label class="check-field"><input name="featured" type="checkbox"> Featured</label>
+          </div>
+          <button class="small-btn primary" type="submit"><i class="fas fa-plus"></i> Add product</button>
+        </form>
+        <div data-products></div>
+      </div>
+    </section>
+
+    <section class="admin-view" data-section="classes">
+      <div class="admin-panel">
+        <div class="panel-heading"><div><span class="eyebrow">Academy</span><h2>Classes</h2></div><button class="small-btn primary" type="button" data-seed="classes"><i class="fas fa-layer-group"></i> Load supplied classes</button></div>
+        <form class="create-form" data-new-class-form>
+          <div class="create-form-title"><strong>Add class</strong><span>Keep the ID simple because it becomes part of the registration link.</span></div>
+          <div class="form-grid">
+            <div class="field"><label>ID</label><input name="id" required placeholder="class-id"></div>
+            <div class="field"><label>Title</label><input name="title" required></div>
+            <div class="field"><label>Track</label><input name="track" placeholder="Makeup"></div>
+            <div class="field"><label>Level</label><input name="level" placeholder="Beginner"></div>
+            <div class="field"><label>Fee</label><input name="price" type="number" min="0" step="0.01"></div>
+            <div class="field"><label>Duration</label><input name="duration" placeholder="2 weeks"></div>
+            <div class="field"><label>Image URL</label><input name="image" placeholder="Optional Cloudinary or image URL"></div>
+            <div class="field full"><label>Summary</label><textarea name="summary" rows="3"></textarea></div>
+          </div>
+          <label class="check-field"><input name="available" type="checkbox" checked> Registration open</label>
+          <button class="small-btn primary" type="submit"><i class="fas fa-plus"></i> Add class</button>
+        </form>
+        <div data-classes></div>
+      </div>
+    </section>
+
+    <section class="admin-view" data-section="services">
+      <div class="admin-panel">
+        <div class="panel-heading"><div><span class="eyebrow">Appointments</span><h2>Services</h2></div><button class="small-btn primary" type="button" data-seed="services"><i class="fas fa-layer-group"></i> Load supplied services</button></div>
+        <form class="create-form" data-new-service-form>
+          <div class="create-form-title"><strong>Add service</strong><span>Use the same ID format as your booking links.</span></div>
+          <div class="form-grid">
+            <div class="field"><label>ID</label><input name="id" required placeholder="service-id"></div>
+            <div class="field"><label>Name</label><input name="name" required></div>
+            <div class="field"><label>Category</label><input name="category" placeholder="Makeup"></div>
+            <div class="field"><label>Price</label><input name="price" type="number" min="0" step="0.01"></div>
+            <div class="field"><label>Duration</label><input name="duration" placeholder="90 min"></div>
+            <div class="field"><label>Image URL</label><input name="image" placeholder="Optional Cloudinary or image URL"></div>
+            <div class="field full"><label>Description</label><textarea name="description" rows="3"></textarea></div>
+          </div>
+          <label class="check-field"><input name="active" type="checkbox" checked> Live on the site</label>
+          <button class="small-btn primary" type="submit"><i class="fas fa-plus"></i> Add service</button>
+        </form>
+        <div data-services></div>
+      </div>
+    </section>
+
+    <section class="admin-view" data-section="availability">
+      <div class="admin-panel">
+        <h2>Appointment availability</h2>
+        <p class="admin-help">Close a date completely or leave it open. The booking system also checks for overlapping appointments before payment.</p>
+        <div class="form-grid"><div class="field"><label>Date</label><input type="date" data-avail-date></div><div class="field"><label>Status</label><select data-avail-open><option value="true">Open</option><option value="false">Closed</option></select></div><div class="field"><label>Note</label><input data-avail-note placeholder="Optional note"></div></div>
+        <div class="admin-actions"><button class="small-btn primary" type="button" data-save-availability><i class="fas fa-save"></i> Save date</button></div>
+        <div data-availability-list></div>
+      </div>
+    </section>
+
+    <section class="admin-view" data-section="inbox"><div class="admin-panel"><h2>Messages & subscribers</h2><div data-inbox></div></div></section>
+  </main>
+</div>
+
+<script type="module" src="shared.js"></script>
+<script type="module" src="admin.js"></script>
+</body>
+</html>
