@@ -1,4 +1,4 @@
-CISCA MAKEOVERS  -  BOOKING PAGE REBUILD
+CISCA MAKEOVERS — BOOKING PAGE REBUILD
 
 Replace these files in the current brand-commerce repo:
 
@@ -46,7 +46,7 @@ The server also checks the selected date/time again immediately before creating 
 The six appointment start times shown in booking.js are configured in TIME_SLOTS:
 09:00, 10:30, 12:00, 13:30, 15:00, 16:30
 
-If Cisca later wants different operating hours, change only that TIME_SLOTS array.
+If Cisca later wants different operating hours, edit only that TIME_SLOTS array.
 
 Deployment
 ----------
