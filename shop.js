@@ -115,7 +115,7 @@ function productCard(p,{eager=false}={}){
       <strong class="product-price">${p.price!=null?money(p.price):'Coming soon'}</strong>
       <div class="product-card-actions">
         <button class="card-quick" type="button" data-quick="${p.id}" ${!ready?'disabled':''}>${ready?'Quick add':'Coming soon'}</button>
-        <a class="card-view" href="product.html?id=${encodeURIComponent(p.id)}" aria-label="View ${escapeHtml(p.name)}">→</a>
+        <a class="card-view" href="product.html?id=${encodeURIComponent(p.id)}" aria-label="View ${escapeHtml(p.name)}"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
       </div>
     </div>
   </article>`;
@@ -185,24 +185,34 @@ function renderFavourites(){
   els.favourites.innerHTML=picks.map((p,i)=>productCard(p,{eager:i<2})).join('');
   bindQuickAdd(els.favourites);
 }
+function isDefaultAllView(){
+  return state.category==='All' && state.sub==='All' && !state.view && !state.query && !state.available;
+}
 function render(){
-  const validSubs=availableSubs(state.category);if(!validSubs.includes(state.sub))state.sub='All';
+  const validSubs=availableSubs(state.category);
+  if(!validSubs.includes(state.sub)) state.sub='All';
   renderFilters();
   const rows=filteredProducts();
-  els.title.textContent=titleFor();els.count.textContent=`${rows.length} ${rows.length===1?'product':'products'}`;
-  els.search.value=state.query;els.search.parentElement.classList.toggle('has-query',Boolean(state.query));
+  const showDefault=isDefaultAllView();
+  els.title.textContent=titleFor();
+  els.count.textContent=`${rows.length} ${rows.length===1?'product':'products'}`;
+  els.search.value=state.query;
+  els.search.parentElement.classList.toggle('has-query',Boolean(state.query));
   const visible=rows.slice(0,state.limit);
   els.grid.innerHTML=visible.length?visible.map((p,i)=>productCard(p,{eager:i<4})).join(''):`<div class="empty-products"><h3>Nothing here yet.</h3><p>Try another category or clear your filters.</p></div>`;
   bindQuickAdd(els.grid);
   els.showing.textContent=rows.length?`Showing ${Math.min(state.limit,rows.length)} of ${rows.length}`:'';
-  els.load.hidden=rows.length<=state.limit;
+  els.load.hidden=!showDefault || rows.length<=state.limit;
+  els.favouritesSection.hidden=!showDefault;
+  document.querySelector('[data-shop-look]')?.toggleAttribute('hidden',!showDefault);
   document.querySelectorAll('[data-shop-chip]').forEach(b=>{
     const chip=b.dataset.shopChip;
-    const active=(chip==='all'&&state.category==='All'&&state.sub==='All'&&!state.view)||(chip==='featured'&&state.view==='featured')||(chip==='new'&&state.view==='new')||(chip==='Nails'&&state.category==='Nails')||(chip==='Hair'&&state.category==='Hair')||(state.sub===chip);
+    const active=(chip==='all'&&showDefault)||(chip==='new'&&state.view==='new')||(chip==='Nails'&&state.category==='Nails'&&state.sub==='All')||(chip==='Hair'&&state.category==='Hair'&&state.sub==='All')||(state.sub===chip);
     b.classList.toggle('active',active);
   });
   els.sortOptions.querySelectorAll('[data-sort-value]').forEach(b=>b.classList.toggle('active',b.dataset.sortValue===state.sort));
 }
+
 function bindQuickAdd(scope){scope.querySelectorAll('[data-quick]:not(:disabled)').forEach(b=>b.addEventListener('click',()=>openQuick(b.dataset.quick)));}
 function openQuick(id){
   const p=products.find(x=>x.id===id);if(!p||!isReady(p))return;
@@ -257,26 +267,6 @@ document.querySelectorAll('[data-quick-close]').forEach(b=>b.addEventListener('c
 document.querySelector('[data-qty-minus]')?.addEventListener('click',()=>{quickQty=Math.max(1,quickQty-1);updateQuickTotal();});
 document.querySelector('[data-qty-plus]')?.addEventListener('click',()=>{quickQty=Math.min(20,quickQty+1);updateQuickTotal();});
 document.querySelector('[data-quick-submit]')?.addEventListener('click',addQuick);
-
-// Add a real thumb-friendly search control to the compact mobile shop header.
-if(matchMedia('(max-width:680px)').matches){
-  const navRight=document.querySelector('.shop-page .nav-right');
-  const bagButton=navRight?.querySelector('[data-bag-open]');
-  if(navRight && bagButton && !navRight.querySelector('.shop-mobile-search')){
-    const searchButton=document.createElement('button');
-    searchButton.type='button';
-    searchButton.className='shop-mobile-search';
-    searchButton.setAttribute('aria-label','Search products');
-    searchButton.textContent='⌕';
-    searchButton.addEventListener('click',()=>{
-      const overlay=document.querySelector('[data-search-overlay]');
-      overlay?.classList.add('open');
-      document.body.classList.add('overlay-open');
-      setTimeout(()=>document.querySelector('[data-site-search]')?.focus(),80);
-    });
-    navRight.insertBefore(searchButton,bagButton);
-  }
-}
 
 renderFavourites();
 render();

@@ -1,4 +1,4 @@
-CISCA MAKEOVERS — BOOKING PAGE REBUILD
+CISCA MAKEOVERS - BOOKING PAGE REBUILD
 
 Replace these files in the current brand-commerce repo:
 
@@ -7,9 +7,10 @@ Replace these files in the current brand-commerce repo:
 3. booking.js
 4. gallery.js
 5. netlify/functions/cisca.mjs
+6. netlify/functions/email-templates.mjs
 
-No files need to be deleted.
-No new environment variables are required.
+The retired Track Order page files are deleted from the repo.
+No new required environment variables are needed.
 
 What changed
 ------------
@@ -17,7 +18,7 @@ What changed
 - Added a compact booking intro with WhatsApp help.
 - Rebuilt booking as four real steps: Service, Date & Time, Details, Review.
 - Added occasion-led recommendations before service selection.
-- Added image-led service selection using Cisca's existing images.
+- Added image-led service selection using Cisca's existing images. Clicking the service image opens the same preview flow as View look.
 - Added example-look previews without leaving the booking page.
 - Added custom calendar UI instead of browser date input.
 - Added tappable appointment time slots.

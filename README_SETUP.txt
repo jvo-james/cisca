@@ -1,4 +1,4 @@
-CISCA MAKEOVERS — BRAND COMMERCE REBUILD
+CISCA MAKEOVERS - BRAND COMMERCE REBUILD
 =========================================
 
 This repo is a full light-mode rebuild of Cisca Makeovers around four connected customer journeys:
@@ -27,7 +27,6 @@ student-resources.html     CM Beginner Makeup Guide + tutorial
  gallery.html              Cisca Lookbook
 about.html                Brand story
 contact.html              Appointment/Academy/order contact paths
-track.html                Public order tracking by email or phone
 success.html              Verified payment confirmation
 admin.html                Protected admin dashboard
 
@@ -39,7 +38,7 @@ SERVER-SIDE INTEGRATIONS
 ------------------------
 Keep all secret values in Netlify environment variables. Never place them in config.js.
 
-Required/expected variables include the existing Firebase Admin, Paystack, Resend and Cloudinary variables documented in env.example. SITE_URL should be the final production origin, for example https://ciscamakeovers.com.
+Required/expected variables include the Firebase Admin, Paystack, Resend and Cloudinary variables documented in env.example. PAYSTACK_CURRENCY defaults to GHS when omitted. SITE_URL should be the final production origin, for example https://ciscamakeovers.com.
 
 After changing environment variables, trigger a fresh Netlify production deploy.
 
@@ -49,8 +48,7 @@ SECURITY MODEL
 - Protected writes are handled through Netlify Functions/Firebase Admin.
 - Paystack payments are verified server-side before paid records are confirmed.
 - Resend API credentials stay server-side.
-- Cloudinary product uploads use the protected admin path.
-- Public order tracking supports order number + email or phone, plus opaque tracking-token links from order emails.
+- Cloudinary uploads use server-generated signatures. Product uploads require admin authentication while booking inspiration uploads use the public booking flow.
 
 VISUAL SYSTEM
 -------------
@@ -68,8 +66,8 @@ DEPLOYMENT CHECKLIST
 5. Test a studio booking payment.
 6. Open one Academy class, set its fee and test student registration.
 7. Test Resend customer/admin messages for orders, bookings, class registrations, contact and newsletter.
-8. Update an order status in admin and test the Track Order button in the customer email.
-9. Test public order tracking with order + email and order + phone.
+8. Update an order status in admin and confirm the customer update email arrives.
+9. Test the shop, booking and Academy payment flows end to end.
 10. Review the site at mobile, tablet and desktop widths before launch.
 
 

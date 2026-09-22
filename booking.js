@@ -144,7 +144,7 @@ function renderServices() {
   if (selectedOccasion) {
     kicker.textContent = `${selectedOccasion} picks`;
     heading.textContent = 'We think you’ll love these.';
-    copy.textContent = 'Choose one, or browse every Cisca service below.';
+    copy.textContent = 'Choose one or browse every Cisca service below.';
   } else {
     kicker.textContent = 'Choose your service';
     heading.textContent = 'What are we doing today?';
@@ -155,10 +155,10 @@ function renderServices() {
     const selected = service.id === selectedServiceId;
     const rec = recommended.includes(service.id);
     return `<article class="service-option ${selected?'selected':''} ${rec?'recommended':''}" data-service-id="${service.id}">
-      <div class="service-option-image">
+      <button type="button" class="service-option-image" data-view-look="${service.id}" aria-label="Preview ${service.name}">
         <img src="${serviceImage(service)}" alt="${service.name}" loading="lazy">
-        <button type="button" class="view-look" data-view-look="${service.id}">View look</button>
-      </div>
+        <span class="view-look">View look <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+      </button>
       <button type="button" class="service-option-copy" data-select-service="${service.id}">
         <span>${service.category}</span>
         <h4>${service.name}</h4>
@@ -175,6 +175,7 @@ function renderServices() {
   }));
   picker.querySelectorAll('[data-select-service]').forEach(btn => btn.addEventListener('click', () => selectService(btn.dataset.selectService)));
   picker.querySelectorAll('[data-view-look]').forEach(btn => btn.addEventListener('click', event => {
+    event.preventDefault();
     event.stopPropagation();
     openLook(serviceById(btn.dataset.viewLook));
   }));
@@ -193,7 +194,7 @@ function openLook(service) {
   if (!service) return;
   const modal = document.createElement('div');
   modal.className = 'look-modal';
-  modal.innerHTML = `<button class="look-modal-backdrop" type="button" aria-label="Close preview"></button><div class="look-modal-card"><img src="${serviceImage(service)}" alt="${service.name}"><button class="look-modal-close" type="button" aria-label="Close">×</button><div class="look-modal-copy"><span class="booking-kicker">Example look</span><h3>${service.name}</h3><p>${service.description || ''}</p><button class="booking-primary" type="button" data-pick-preview>Choose this service</button></div></div>`;
+  modal.innerHTML = `<button class="look-modal-backdrop" type="button" aria-label="Close preview"></button><div class="look-modal-card"><img src="${serviceImage(service)}" alt="${service.name}"><button class="look-modal-close" type="button" aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button><div class="look-modal-copy"><span class="booking-kicker">Example look</span><h3>${service.name}</h3><p>${service.description || ''}</p><button class="booking-primary" type="button" data-pick-preview>Choose this service</button></div></div>`;
   document.body.append(modal);
   document.body.style.overflow = 'hidden';
   const close = () => { modal.remove(); document.body.style.overflow = ''; };
@@ -443,8 +444,34 @@ document.querySelectorAll('[data-mobile-summary-close]').forEach(btn => btn.addE
   document.body.style.overflow = '';
 }));
 
+let inspoFiles=[];
+const inspoInput=document.querySelector('#inspo-photos');
+const inspoPreview=document.querySelector('[data-inspo-preview]');
+const inspoLimit=document.querySelector('[data-inspo-limit]');
+function sameFile(a,b){return a.name===b.name&&a.size===b.size&&a.lastModified===b.lastModified}
+function syncInspoInput(){
+  if(!inspoInput)return;
+  const dt=new DataTransfer();
+  inspoFiles.forEach(file=>dt.items.add(file));
+  inspoInput.files=dt.files;
+  inspoInput.disabled=inspoFiles.length>=4;
+  if(inspoLimit)inspoLimit.textContent=`${inspoFiles.length} of 4 photos added`;
+}
+function renderInspoPreview(){
+  if(!inspoPreview)return;
+  inspoPreview.innerHTML='';
+  inspoFiles.forEach((file,index)=>{
+    const tile=document.createElement('div');tile.className='inspo-tile';
+    const img=document.createElement('img');img.alt=`Inspiration photo ${index+1}`;img.src=URL.createObjectURL(file);
+    const remove=document.createElement('button');remove.type='button';remove.className='inspo-remove';remove.setAttribute('aria-label',`Remove inspiration photo ${index+1}`);remove.innerHTML='<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+    remove.addEventListener('click',()=>{inspoFiles.splice(index,1);syncInspoInput();renderInspoPreview();});
+    tile.append(img,remove);inspoPreview.append(tile);
+  });
+}
+
 async function uploadInspoPhotos(files){
   const chosen=[...files].slice(0,4);
+  if(files.length>4) throw new Error('You can add a maximum of 4 inspiration photos.');
   if(!chosen.length) return [];
   const urls=[];
   for(const file of chosen){
@@ -459,12 +486,14 @@ async function uploadInspoPhotos(files){
   }
   return urls;
 }
-const inspoInput=document.querySelector('#inspo-photos');
-const inspoPreview=document.querySelector('[data-inspo-preview]');
 inspoInput?.addEventListener('change',()=>{
-  const files=[...(inspoInput.files||[])].slice(0,4);
-  inspoPreview.innerHTML='';
-  files.forEach(file=>{const img=document.createElement('img');img.alt='Inspiration preview';img.src=URL.createObjectURL(file);inspoPreview.append(img);});
+  const picked=[...(inspoInput.files||[])];
+  const slots=4-inspoFiles.length;
+  const additions=picked.filter(file=>!inspoFiles.some(existing=>sameFile(existing,file))).slice(0,Math.max(0,slots));
+  if(picked.length>slots) toast('You can add a maximum of 4 inspiration photos.');
+  inspoFiles.push(...additions);
+  syncInspoInput();
+  renderInspoPreview();
 });
 form.addEventListener('submit', async event => {
   event.preventDefault();
@@ -476,7 +505,7 @@ form.addEventListener('submit', async event => {
   try {
     const fd = Object.fromEntries(new FormData(form));
     delete fd.inspoPhotos;
-    const inspoUrls = await uploadInspoPhotos(inspoInput?.files || []);
+    const inspoUrls = await uploadInspoPhotos(inspoFiles);
     const result = await api('/booking/start', {
       method:'POST',
       body:JSON.stringify({ ...fd, inspoUrls, serviceIds:[selectedServiceId] })
