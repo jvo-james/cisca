@@ -143,8 +143,6 @@
 .inspo-upload input{margin-top:12px;width:100%;border:1px dashed #bcaeb0;padding:14px;background:#fff}
 .inspo-preview{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
 .inspo-preview img{aspect-ratio:1;object-fit:cover}
-.calendar-day.selected{box-shadow:0 0 0 3px rgba(217,79,131,.18)}
-.calendar-day.today:not(.selected){outline:2px solid var(--wine);outline-offset:-4px;font-weight:800}
 @media(max-width:900px){
  .booking-layout{padding-top:28px}
  .booking-progress{margin:0;border-left:0;border-right:0}
@@ -217,8 +215,11 @@
 .legend-selected{background:var(--wine);border-color:var(--wine)}
 .legend-closed{background:linear-gradient(135deg,transparent 42%,#bfb4ac 43%,#bfb4ac 57%,transparent 58%)}
 .calendar-day{border-radius:0!important}
-.calendar-day.selected{background:var(--wine);color:#fff;box-shadow:inset 0 0 0 2px var(--wine);font-weight:800}
-.calendar-day.today:not(.selected){outline:0;font-weight:700;background:var(--bone);box-shadow:inset 0 -2px 0 var(--wine)}
+.calendar-day.selected,
+.calendar-day.selected:not(:disabled):hover,
+.calendar-day.selected:focus{background:var(--wine);color:#fff;box-shadow:inset 0 0 0 2px var(--wine);font-weight:800}
+.calendar-day.selected::after,.calendar-day.selected:hover::after{background:#fff}
+.calendar-day.today:not(.selected){outline:0;font-weight:600}
 .inspo-limit{margin-top:9px;font-size:.58rem;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .inspo-preview{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .inspo-tile{position:relative;aspect-ratio:1;background:var(--bone);overflow:hidden}
@@ -253,4 +254,91 @@
  .stage-actions .booking-secondary{font-size:.58rem;width:auto;padding:0 12px;color:var(--ink);display:inline-flex;align-items:center;justify-content:center}
  .stage-actions .booking-secondary i{font-size:.68rem}
  .service-option-copy p{display:-webkit-box}
+}
+
+
+/* Keyboard focus remains visible without allowing hover to override selection. */
+.calendar-day:focus-visible {
+  outline: 2px solid var(--wine);
+  outline-offset: 2px;
+  z-index: 1;
+}
+.calendar-day.selected:focus-visible {
+  outline-color: var(--ink);
+}
+
+/* Keep the existing calendar design, but give its date cells room on phones. */
+@media (max-width: 560px) {
+  .calendar-panel {
+    padding: 20px 12px 22px;
+    min-width: 0;
+  }
+  .calendar-head {
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .calendar-head h3 {
+    font-size: clamp(1.12rem, 4.8vw, 1.35rem);
+    line-height: 1.15;
+  }
+  .calendar-arrows {
+    flex-shrink: 0;
+  }
+  .calendar-arrows button {
+    width: 40px;
+    height: 40px;
+  }
+  .calendar-week,
+  .calendar-grid {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+  .calendar-week span {
+    font-size: .56rem;
+    letter-spacing: .025em;
+  }
+  .calendar-grid {
+    gap: 3px;
+    grid-auto-rows: minmax(39px, auto);
+  }
+  .calendar-day {
+    width: 100%;
+    min-width: 0;
+    min-height: 39px;
+    aspect-ratio: auto;
+    padding: 0;
+    font-size: .74rem;
+    border-radius: 0 !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .calendar-legend {
+    gap: 9px 12px;
+    font-size: .55rem;
+    line-height: 1.4;
+  }
+  .calendar-legend span {
+    gap: 5px;
+  }
+}
+
+@media (max-width: 360px) {
+  .calendar-panel {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .calendar-head h3 {
+    font-size: 1.08rem;
+  }
+  .calendar-arrows button {
+    width: 36px;
+    height: 38px;
+  }
+  .calendar-grid {
+    gap: 2px;
+    grid-auto-rows: minmax(36px, auto);
+  }
+  .calendar-day {
+    min-height: 36px;
+    font-size: .7rem;
+  }
 }

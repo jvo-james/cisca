@@ -238,15 +238,24 @@ async function renderCalendar() {
     const tooFar = d > max;
     const closed = availability.closedDates.includes(value);
     const disabled = outside || past || tooFar || closed;
-    cells.push(`<button type="button" class="calendar-day ${outside?'outside':''} ${closed?'closed':''} ${value===selectedDate?'selected':''} ${ymd(today)===value?'today':''}" data-date="${value}" ${disabled?'disabled':''} aria-label="${formatLongDate(value)}">${d.getDate()}</button>`);
+    const isSelected = value === selectedDate && !outside;
+    cells.push(`<button type="button" class="calendar-day ${outside?'outside':''} ${closed?'closed':''} ${isSelected?'selected':''} ${ymd(today)===value?'today':''}" data-date="${value}" ${disabled?'disabled':''} aria-pressed="${isSelected?'true':'false'}" aria-label="${formatLongDate(value)}">${d.getDate()}</button>`);
   }
   calendarEl.innerHTML = cells.join('');
   calendarEl.querySelectorAll('[data-date]:not(:disabled)').forEach(btn => btn.addEventListener('click', () => {
     selectedDate = btn.dataset.date;
+
+    // Update the selected state in place so the highlight appears immediately.
+    // Re-rendering the entire calendar here caused a visible flicker on mobile.
+    calendarEl.querySelectorAll('.calendar-day').forEach(day => {
+      const isSelected = day.dataset.date === selectedDate && !day.classList.contains('outside');
+      day.classList.toggle('selected', isSelected);
+      day.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+    });
+
     selectedTime = '';
     form.date.value = selectedDate;
     form.time.value = '';
-    renderCalendar();
     renderTimes();
     updateSummary();
     setTimeout(()=>document.querySelector('.times-panel')?.scrollIntoView({behavior:'smooth',block:'start'}),120);
