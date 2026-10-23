@@ -1,6 +1,36 @@
 import { CISCA_CONFIG, money } from './config.js';
 import { PRODUCT_SEED } from './catalog.js';
+
 import { IMAGES } from './images.js';
+
+// If an uploaded or remote image fails, show a bundled local image instead.
+// This listener uses capture because image error events do not bubble.
+function fallbackImageFor(img) {
+  if (img.dataset.fallback) return img.dataset.fallback;
+  const context = `${img.alt || ''} ${img.closest('article, a, figure, .product-detail, .product-gallery, .search-item, .bag-item')?.textContent || ''}`.toLowerCase();
+  if (/\blogo\b/.test(context)) return IMAGES.logo;
+  if (/\bnail|acrylic|manicure|pedicure\b/.test(context)) return IMAGES.nails;
+  if (/\bhair|curl|frontal|closure\b/.test(context)) return IMAGES.hair;
+  if (/\bbrow|lash|eyebrow|eyelash\b/.test(context)) return /\bbrow\b|eyebrow/.test(context) ? IMAGES.brows : IMAGES.lashes;
+  if (/\bbridal|bride|wedding\b/.test(context)) return IMAGES.bridal;
+  if (/\bclass|academy|student|training\b/.test(context)) return IMAGES.classroom;
+  if (/\bstudio\b/.test(context)) return IMAGES.studio;
+  if (/\bmakeup|glam|beauty\b/.test(context)) return IMAGES.makeup || IMAGES.beauty;
+  return IMAGES.beauty;
+}
+
+document.addEventListener('error', event => {
+  const img = event.target;
+  if (!(img instanceof HTMLImageElement) || img.dataset.fallbackApplied === 'true') return;
+  const fallback = fallbackImageFor(img);
+  const currentPath = img.getAttribute('src') || '';
+  if (!fallback || currentPath === fallback) {
+    img.classList.add('image-unavailable');
+    return;
+  }
+  img.dataset.fallbackApplied = 'true';
+  img.src = fallback;
+}, true);
 const header=`<header class="site-header" data-main-header>
 <div class="wrap nav-row">
 <nav class="nav-left" aria-label="Main navigation">

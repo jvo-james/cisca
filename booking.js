@@ -25,15 +25,25 @@ const activeServices = services.filter(s => s.active !== false);
 const serviceById = id => activeServices.find(s => s.id === id);
 
 const params = new URLSearchParams(location.search);
-let selectedServiceId = params.get('service') && serviceById(params.get('service')) ? params.get('service') : '';
-let selectedOccasion = params.get('occasion') || '';
-let serviceFilter = params.get('category') || 'All';
-let stage = 1;
-let selectedDate = '';
-let selectedTime = '';
+const DRAFT_KEY = `cisca-booking-draft:${location.pathname}${location.search}`;
+let savedDraft = null;
+try { savedDraft = JSON.parse(sessionStorage.getItem(DRAFT_KEY) || 'null'); } catch { savedDraft = null; }
+const hasSavedDraft = Boolean(savedDraft && typeof savedDraft === 'object');
+let selectedServiceId = hasSavedDraft && serviceById(savedDraft.selectedServiceId)
+  ? savedDraft.selectedServiceId
+  : (params.get('service') && serviceById(params.get('service')) ? params.get('service') : '');
+let selectedOccasion = hasSavedDraft ? (savedDraft.selectedOccasion || '') : (params.get('occasion') || '');
+let serviceFilter = hasSavedDraft ? (savedDraft.serviceFilter || 'All') : (params.get('category') || 'All');
+let stage = hasSavedDraft ? Math.max(1, Math.min(4, Number(savedDraft.stage) || 1)) : 1;
+let selectedDate = hasSavedDraft ? (savedDraft.selectedDate || '') : '';
+let selectedTime = hasSavedDraft ? (savedDraft.selectedTime || '') : '';
 let availability = { closedDates: [], busy: {} };
-let currentMonth = new Date();
-currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+const savedMonth = hasSavedDraft && /^\d{4}-\d{2}$/.test(savedDraft.currentMonth || '')
+  ? new Date(`${savedDraft.currentMonth}-01T12:00:00`)
+  : null;
+let currentMonth = savedMonth && !Number.isNaN(savedMonth.getTime())
+  ? new Date(savedMonth.getFullYear(), savedMonth.getMonth(), 1)
+  : new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
 const TIME_SLOTS = ['09:00','10:30','12:00','13:30','15:00','16:30'];
 const monthCache = new Map();
@@ -99,9 +109,65 @@ function overlapsBusy(date, time) {
   });
 }
 
+function serviceFallbackImage(service) {
+  if (!service) return IMAGES.beauty;
+  return serviceImages[service.id] || ({ Makeup:IMAGES.makeup || IMAGES.beauty, Lashes:IMAGES.lashes, Brows:IMAGES.brows, Hair:IMAGES.hair, Nails:IMAGES.nails }[service.category] || IMAGES.beauty);
+}
+
 function serviceImage(service) {
   if (!service) return IMAGES.beauty;
-  return service.image || serviceImages[service.id] || ({ Makeup:IMAGES.beauty, Lashes:IMAGES.lashes, Brows:IMAGES.brows, Hair:IMAGES.hair, Nails:IMAGES.nails }[service.category] || IMAGES.beauty);
+  return service.image || serviceFallbackImage(service);
+}
+
+function bindImageFallbacks(root = document) {
+  root.querySelectorAll('img[data-fallback]').forEach(img => {
+    if (img.dataset.fallbackBound === 'true') return;
+    img.dataset.fallbackBound = 'true';
+    img.addEventListener('error', () => {
+      if (img.dataset.fallbackApplied === 'true') return;
+      img.dataset.fallbackApplied = 'true';
+      img.src = img.dataset.fallback;
+    });
+  });
+}
+
+function saveDraft() {
+  try {
+    const fields = {};
+    new FormData(form).forEach((value, key) => {
+      if (typeof value === 'string' && key !== 'inspoPhotos') fields[key] = value;
+    });
+    const occasionHelper = document.querySelector('[data-occasion-helper]');
+    const optionalNotes = document.querySelector('.optional-notes');
+    sessionStorage.setItem(DRAFT_KEY, JSON.stringify({
+      selectedServiceId, selectedOccasion, serviceFilter, stage, selectedDate, selectedTime,
+      currentMonth: monthKey(currentMonth), fields,
+      occasionOpen: Boolean(occasionHelper?.open), notesOpen: Boolean(optionalNotes?.open),
+      savedAt: Date.now()
+    }));
+  } catch {
+    // Booking remains usable when the browser blocks session storage.
+  }
+}
+
+function restoreDraftFields() {
+  if (!hasSavedDraft || !savedDraft.fields) return;
+  Object.entries(savedDraft.fields).forEach(([name, value]) => {
+    const controls = form.querySelectorAll(`[name="${name}"]`);
+    if (!controls.length) return;
+    if (controls[0].type === 'radio') {
+      controls.forEach(control => { control.checked = control.value === value; });
+    } else if (controls[0].type !== 'file') {
+      controls[0].value = value;
+    }
+  });
+  form.date.value = selectedDate;
+  form.time.value = selectedTime;
+  form.occasion.value = selectedOccasion;
+  const occasionHelper = document.querySelector('[data-occasion-helper]');
+  const optionalNotes = document.querySelector('.optional-notes');
+  if (occasionHelper && typeof savedDraft.occasionOpen === 'boolean') occasionHelper.open = savedDraft.occasionOpen;
+  if (optionalNotes && typeof savedDraft.notesOpen === 'boolean') optionalNotes.open = savedDraft.notesOpen;
 }
 
 function setHelpLinks() {
@@ -156,7 +222,7 @@ function renderServices() {
     const rec = recommended.includes(service.id);
     return `<article class="service-option ${selected?'selected':''} ${rec?'recommended':''}" data-service-id="${service.id}">
       <button type="button" class="service-option-image" data-view-look="${service.id}" aria-label="Preview ${service.name}">
-        <img src="${serviceImage(service)}" alt="${service.name}" loading="lazy">
+        <img src="${serviceImage(service)}" data-fallback="${serviceFallbackImage(service)}" alt="${service.name}" loading="lazy" decoding="async">
         <span class="view-look">View look <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
       </button>
       <button type="button" class="service-option-copy" data-select-service="${service.id}">
@@ -169,9 +235,11 @@ function renderServices() {
     </article>`;
   }).join('');
 
+  bindImageFallbacks(picker);
   tabs.querySelectorAll('[data-service-filter]').forEach(btn => btn.addEventListener('click', () => {
     serviceFilter = btn.dataset.serviceFilter;
     renderServices();
+    saveDraft();
   }));
   picker.querySelectorAll('[data-select-service]').forEach(btn => btn.addEventListener('click', () => selectService(btn.dataset.selectService)));
   picker.querySelectorAll('[data-view-look]').forEach(btn => btn.addEventListener('click', event => {
@@ -194,8 +262,9 @@ function openLook(service) {
   if (!service) return;
   const modal = document.createElement('div');
   modal.className = 'look-modal';
-  modal.innerHTML = `<button class="look-modal-backdrop" type="button" aria-label="Close preview"></button><div class="look-modal-card"><img src="${serviceImage(service)}" alt="${service.name}"><button class="look-modal-close" type="button" aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button><div class="look-modal-copy"><span class="booking-kicker">Example look</span><h3>${service.name}</h3><p>${service.description || ''}</p><button class="booking-primary" type="button" data-pick-preview>Choose this service</button></div></div>`;
+  modal.innerHTML = `<button class="look-modal-backdrop" type="button" aria-label="Close preview"></button><div class="look-modal-card"><img src="${serviceImage(service)}" data-fallback="${serviceFallbackImage(service)}" alt="${service.name}"><button class="look-modal-close" type="button" aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button><div class="look-modal-copy"><span class="booking-kicker">Example look</span><h3>${service.name}</h3><p>${service.description || ''}</p><button class="booking-primary" type="button" data-pick-preview>Choose this service</button></div></div>`;
   document.body.append(modal);
+  bindImageFallbacks(modal);
   document.body.style.overflow = 'hidden';
   const close = () => { modal.remove(); document.body.style.overflow = ''; };
   modal.querySelector('.look-modal-backdrop').onclick = close;
@@ -258,6 +327,7 @@ async function renderCalendar() {
     form.time.value = '';
     renderTimes();
     updateSummary();
+    saveDraft();
     setTimeout(()=>document.querySelector('.times-panel')?.scrollIntoView({behavior:'smooth',block:'start'}),120);
   }));
 }
@@ -275,6 +345,11 @@ function renderTimes() {
     return;
   }
   const slots = TIME_SLOTS.map(time => ({ time, busy: overlapsBusy(selectedDate,time) }));
+  if (selectedTime && slots.some(slot => slot.time === selectedTime && slot.busy)) {
+    selectedTime = '';
+    form.time.value = '';
+    saveDraft();
+  }
   const open = slots.filter(s => !s.busy);
   if (!open.length) {
     timeSlotsEl.innerHTML = '<p class="time-empty">Cisca is fully booked for this date. Try another day.</p>';
@@ -286,6 +361,7 @@ function renderTimes() {
     form.time.value = selectedTime;
     renderTimes();
     updateSummary();
+    saveDraft();
     setTimeout(()=>document.querySelector('.location-section')?.scrollIntoView({behavior:'smooth',block:'start'}),120);
   }));
 }
@@ -310,6 +386,7 @@ function addNote(text, button) {
     area.value = [area.value.trim(), text].filter(Boolean).join('\n');
     button.classList.add('active');
   }
+  saveDraft();
 }
 
 function updateSummary() {
@@ -323,8 +400,12 @@ function updateSummary() {
   document.querySelector('[data-progress-service]').textContent = service?.name || 'Choose your look';
   document.querySelector('[data-progress-date]').textContent = selectedDate ? `${new Date(`${selectedDate}T12:00:00`).toLocaleDateString('en-GH',{day:'numeric',month:'short'})}${selectedTime?` · ${formatTime(selectedTime)}`:''}` : 'Pick a slot';
   const image = document.querySelector('[data-summary-image] img');
+  image.dataset.fallback = serviceFallbackImage(service);
+  image.dataset.fallbackBound = '';
+  image.dataset.fallbackApplied = '';
   image.src = serviceImage(service);
   image.alt = service?.name || 'Cisca beauty look';
+  bindImageFallbacks(document.querySelector('[data-summary-image]'));
   document.querySelector('[data-change-service]').hidden = !service;
   document.querySelector('[data-full-price]').textContent = money(total());
   document.querySelector('[data-deposit-price]').textContent = money(deposit());
@@ -336,6 +417,7 @@ function updateSummary() {
   mobileBar.hidden = !service;
   document.querySelectorAll('.payment-option').forEach(label => label.classList.toggle('selected', label.querySelector('input').checked));
   renderMobileSummary();
+  saveDraft();
 }
 
 function renderMobileSummary() {
@@ -354,7 +436,7 @@ function renderReview() {
   const fd = Object.fromEntries(new FormData(form));
   const location = fd.locationType === 'Home appointment' ? `Home service${fd.address ? `, ${fd.address}` : ''}` : 'Cisca Studio';
   document.querySelector('[data-review]').innerHTML = `<div class="review-service">
-      <img src="${serviceImage(service)}" alt="${service.name}">
+      <img src="${serviceImage(service)}" data-fallback="${serviceFallbackImage(service)}" alt="${service.name}" loading="lazy">
       <div><span class="booking-kicker">${service.category}</span><h3>${service.name}</h3><p>${service.duration || 'Timing confirmed'}</p></div>
       <strong>${service.price != null ? money(service.price) : 'Price on request'}</strong>
     </div>
@@ -367,6 +449,7 @@ function renderReview() {
       <div><span>Phone</span><strong>${fd.phone || ''}</strong></div>
     </div>
     <div class="review-total"><span>Service total</span><strong>${money(total())}</strong></div>`;
+  bindImageFallbacks(document.querySelector('[data-review]'));
   updateSummary();
 }
 
@@ -390,17 +473,32 @@ function validateStage() {
   return true;
 }
 
-function showStage(next) {
+function showStage(next, options = {}) {
   stage = Math.max(1, Math.min(4, next));
-  document.querySelectorAll('[data-stage]').forEach(section => section.classList.toggle('active', Number(section.dataset.stage) === stage));
+  document.querySelectorAll('[data-stage]').forEach(section => {
+    const active = Number(section.dataset.stage) === stage;
+    section.classList.toggle('active', active);
+    section.setAttribute('aria-hidden', active ? 'false' : 'true');
+  });
   document.querySelectorAll('[data-step-nav]').forEach(button => {
     const n = Number(button.dataset.stepNav);
     button.classList.toggle('active', n === stage);
     button.classList.toggle('done', n < stage);
+    if (n === stage) button.setAttribute('aria-current', 'step');
+    else button.removeAttribute('aria-current');
+    const node = button.querySelector('.step-node');
+    if (node) node.textContent = n < stage ? '✓' : String(n);
   });
+  const track = document.querySelector('[data-progress-track]');
+  if (track) track.style.setProperty('--progress', `${((stage - 1) / 3) * 100}%`);
   if (stage === 4) renderReview();
-  const progress = document.querySelector('.booking-progress');
-  setTimeout(()=>{ const target=document.querySelector(`[data-stage="${stage}"]`); target?.scrollIntoView({behavior:'smooth',block:'start'}); }, 60);
+  saveDraft();
+  if (options.scroll !== false) {
+    setTimeout(() => {
+      const target = document.querySelector(`[data-stage="${stage}"]`);
+      target?.scrollIntoView({ behavior:'smooth', block:'start' });
+    }, 60);
+  }
 }
 
 occasionGrid.addEventListener('click', event => {
@@ -409,21 +507,33 @@ occasionGrid.addEventListener('click', event => {
   selectedOccasion = btn.dataset.occasion;
   renderOccasions();
   renderServices();
+  updateSummary();
+  saveDraft();
+  const helper = document.querySelector('[data-occasion-helper]');
+  if (helper) helper.open = false;
   setTimeout(() => serviceSection.scrollIntoView({ behavior:'smooth', block:'start' }), 80);
 });
 
-document.querySelector('[data-skip-occasion]').addEventListener('click', () => serviceSection.scrollIntoView({ behavior:'smooth', block:'start' }));
 document.querySelector('[data-change-service]').addEventListener('click', () => { showStage(1); setTimeout(() => serviceSection.scrollIntoView({behavior:'smooth',block:'start'}),250); });
+document.querySelector('[data-clear-occasion]').addEventListener('click', () => {
+  selectedOccasion = '';
+  renderOccasions();
+  renderServices();
+  updateSummary();
+  saveDraft();
+});
 
 document.querySelector('[data-calendar-prev]').addEventListener('click', async () => {
   const now = new Date();
   const previous = new Date(currentMonth.getFullYear(), currentMonth.getMonth()-1, 1);
   if (previous < new Date(now.getFullYear(), now.getMonth(), 1)) return;
   currentMonth = previous;
+  saveDraft();
   await renderCalendar();
 });
 document.querySelector('[data-calendar-next]').addEventListener('click', async () => {
   currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth()+1, 1);
+  saveDraft();
   await renderCalendar();
 });
 
@@ -431,6 +541,9 @@ form.querySelectorAll('input[name="locationType"]').forEach(input => input.addEv
 form.querySelectorAll('input[name="paymentOption"]').forEach(input => input.addEventListener('change', updateSummary));
 document.querySelectorAll('[data-note]').forEach(button => button.addEventListener('click', () => addNote(button.dataset.note, button)));
 form.addEventListener('input', updateSummary);
+form.addEventListener('change', () => { updateLocationState(); saveDraft(); });
+document.querySelector('[data-occasion-helper]').addEventListener('toggle', saveDraft);
+document.querySelector('.optional-notes').addEventListener('toggle', saveDraft);
 
 form.querySelectorAll('[data-next]').forEach(button => button.addEventListener('click', () => {
   if (validateStage()) showStage(stage + 1);
@@ -503,6 +616,7 @@ inspoInput?.addEventListener('change',()=>{
   inspoFiles.push(...additions);
   syncInspoInput();
   renderInspoPreview();
+  saveDraft();
 });
 form.addEventListener('submit', async event => {
   event.preventDefault();
@@ -534,16 +648,22 @@ form.addEventListener('submit', async event => {
   }
 });
 
+restoreDraftFields();
 setHelpLinks();
+if (!hasSavedDraft && selectedServiceId && !params.get('category')) {
+  serviceFilter = serviceById(selectedServiceId)?.category || 'All';
+}
 renderOccasions();
 renderServices();
 updateLocationState();
 await renderCalendar();
 renderTimes();
 updateSummary();
-
-if (selectedServiceId) {
-  serviceFilter = serviceById(selectedServiceId)?.category || 'All';
-  renderServices();
-  updateSummary();
+document.querySelectorAll('[data-note]').forEach(button => {
+  const notes = form.notes.value.split('\n').map(line => line.trim());
+  button.classList.toggle('active', notes.includes(button.dataset.note));
+});
+showStage(stage, { scroll: false });
+if (stage > 1) {
+  setTimeout(() => document.querySelector(`[data-stage="${stage}"]`)?.scrollIntoView({ behavior: 'auto', block: 'start' }), 80);
 }
