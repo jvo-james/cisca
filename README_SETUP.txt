@@ -80,3 +80,14 @@ VISUAL UPDATE NOTES
 - Booking date selection moves the user to available times and stage changes return to the active section.
 - Booking supports up to four inspiration photos through the existing Cloudinary environment.
 - Paystack remains server-side initialized and verified. The existing Resend flow sends payment confirmations.
+
+
+DESIGN AND EMAIL UPDATES
+- The site uses Font Awesome 6.5.2 for icons and Unsplash for non-gallery photography. The Netlify Content-Security-Policy now permits these resources.
+- Gallery photography is loaded from the local images folder. All usable WebP images in that folder are included in gallery.js.
+- Add RESEND_API_KEY, EMAIL_FROM, ADMIN_EMAIL and ADMIN_EMAILS in Netlify environment variables. EMAIL_FROM must use a verified sender domain in Resend for production delivery.
+- Transactional messages cover booking started/confirmed, order started/confirmed, class registration started/confirmed, newsletter signup, contact messages and order or appointment status updates.
+- Admin Email Studio sends campaigns in batches of 10 with at least one second between batches. Keep the admin page open until the campaign reports that it has finished. Larger campaigns can take longer.
+- Appointment availability can be closed by date or given a custom comma-separated list of HH:MM time slots in Admin > Availability. Leave the times field empty to use the default schedule. A day is disabled on the booking calendar when all its configured slots are occupied.
+- Booking drafts are saved in sessionStorage for the current tab. Inspiration-photo file selections must be chosen again after a refresh because browsers do not allow a website to restore file inputs.
+- After successful Paystack verification, success.html displays a receipt with a print / save-as-PDF action.

@@ -1,4 +1,4 @@
-import { IMAGES } from './images.js';import { PRODUCT_SEED } from './catalog.js';
+import { IMAGES } from './images.js';import { PRODUCT_SEED, PRODUCT_IMAGE_POOL } from './catalog.js';
 import { api, saveCart, getCart, toast } from './shared.js';
 import { money } from './config.js';
 
@@ -87,7 +87,7 @@ function getSub(p){
 }
 
 function isReady(p){ return Boolean(p.available && p.price != null); }
-function imageFor(p){ return p.image || FALLBACK[p.category] || IMAGES.beauty; }
+function imageFor(p){ const i=PRODUCT_SEED.findIndex(x=>x.id===p.id);return p.image || PRODUCT_IMAGE_POOL[Math.max(0,i)%PRODUCT_IMAGE_POOL.length] || FALLBACK[p.category] || IMAGES.beauty; }
 function descriptorFor(p){
   if (p.subtitle) return p.subtitle;
   if (p.variant) return p.variant;
