@@ -1,4 +1,4 @@
-const BRAND={name:'Cisca Makeovers',ink:'#181412',wine:'#731C38',petal:'#EAD9D7',bone:'#F6F1E9',paper:'#FFFDF9',line:'#D8CFC5',muted:'#746B65'};
+const BRAND={name:'Cisca Makeovers',ink:'#21151b',wine:'#C72E70',petal:'#F9DCE9',bone:'#FFF3F8',paper:'#FFFEFE',line:'#EFD8E2',muted:'#78636E'};
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const money=v=>`GH₵${Number(v||0).toFixed(2)}`;
 const site=()=>String(process.env.SITE_URL||'').replace(/\/$/,'');
